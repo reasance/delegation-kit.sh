@@ -21,29 +21,38 @@ below with the numbers observed after running the
 
 ## Verified snapshot
 
-**0.34.1, checked on 2026-10-24** on macOS 26.5.1 with Claude Code
-`2.1.310`, Codex CLI `0.164.0`, Kimi Code `2.3.1` and Muse Code `1.4.12`
-(`1.4.12-R6909.1`), after the repository moved to `reasance`.
+**0.35.0, checked on 2026-10-25** on macOS 26.5.1 with Claude Code
+`2.1.310`, Codex CLI `0.164.0`, Kimi Code `2.3.1` and Muse Code `1.4.13`
+(`1.4.13-R6996.1`).
 
-- **Offline**: the 14 suites green in 48 seconds, ShellCheck at
-  `-S warning` on the 30 files CI collects, ruff, the eleven Node tests
-  and the version gate.
-- **Install and doctor**: a reinstall from the release branch. Static
-  `doctor.sh` reports `57 OK, 6 WARN, 0 FAIL`; `doctor.sh --ping`:
-  `59 OK, 6 WARN, 0 FAIL`, the Claude → Codex round-trip returned `PONG`.
-  No Muse or other external model was called for this release.
-- **Catalog**: `catalog refresh --shipped` on 2026-10-24: 28 models placed,
-  no score, price or tier changed; Claude Haiku 4.5 still unmatched.
-- **Redirect**: `git ls-remote` on the old
-  `github.com/matteoscurati/delegation-kit` URL still lists the
-  `delegation-kit--v0.34.0` tag, so wrappers published before this release
-  keep installing.
+- **Offline**: the 14 suites green in 53 seconds, ShellCheck at
+  `-S warning` on the 30 files CI collects, ruff, the eleven Node tests,
+  the version gate and `git diff --check`.
+- **Install and doctor**: a reinstall from the release branch removed no
+  edited profile and installed `sol-builder` and `sol-reviewer` in place of
+  the `terra-*` ones. Static `doctor.sh` reports `57 OK, 6 WARN, 0 FAIL`;
+  `doctor.sh --ping`: `59 OK, 6 WARN, 0 FAIL`, the Claude → Codex
+  round-trip returned `PONG`.
+- **Catalog**: written by controller-models from its registry, with that
+  day's Artificial Analysis index and every price re-checked on its official
+  page on 2026-10-25. `catalog refresh --shipped` was not used: it matched
+  `deepseek-flash` to the retired V4.1 Flash (39.5) instead of V4.1 Flash
+  1017 (45.1), priced Muse Wonder Full at $0 and dropped the price sources.
+- **External models**: none was called through the kit's runners for this
+  release (the GLM lane has no Z.ai key on this machine). The usage key
+  `delegation-grok` now reads, `grok-4.7-build`, was observed on 2026-10-25
+  in a Grok Build CLI run with `grok-4.7` made through bottega-kit.
 
 ### Earlier releases
 
 Newest first. "Suites" means the regression suites; every live call was
 authorized and no key was printed.
 
+- **0.34.1** (2026-10-24, Claude Code `2.1.310`, Codex `0.164.0`, Kimi
+  Code `2.3.1`, Muse Code `1.4.12-R6909.1`): suites in 48 s, ShellCheck,
+  ruff, Node tests, version gate; doctor `57 OK, 6 WARN, 0 FAIL`, with
+  `--ping` `59 OK`. Catalog refreshed, nothing changed. The old
+  `matteoscurati/delegation-kit` URL still listed the 0.34.0 tag.
 - **0.34.0** (2026-10-24, Claude Code `2.1.309`, Codex `0.164.0`, Kimi
   Code `2.3.1`, Muse Code `1.4.12-R6909.1`): suites in 43 s (new: the Muse
   runner suite, `openai-compatible` effort, `contributor_mode`); doctor

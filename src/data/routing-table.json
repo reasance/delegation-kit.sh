@@ -8,7 +8,7 @@
   "profiles": [
     {
       "profile": "luna-clerk",
-      "model": "gpt-5.6-luna",
+      "model": "gpt-6-luna",
       "family": "openai",
       "adapter": "codex",
       "lane": "clerk",
@@ -21,8 +21,8 @@
       "review_policy": "optional"
     },
     {
-      "profile": "terra-builder",
-      "model": "gpt-5.6-terra",
+      "profile": "sol-builder",
+      "model": "gpt-6.1-sol",
       "family": "openai",
       "adapter": "codex",
       "lane": "builder",
@@ -35,8 +35,8 @@
       "review_policy": "optional"
     },
     {
-      "profile": "terra-reviewer",
-      "model": "gpt-5.6-terra",
+      "profile": "sol-reviewer",
+      "model": "gpt-6.1-sol",
       "family": "openai",
       "adapter": "codex",
       "lane": "routine-review",
@@ -49,8 +49,8 @@
       "review_policy": "optional"
     },
     {
-      "profile": "terra-reviewer",
-      "model": "gpt-5.6-terra",
+      "profile": "sol-reviewer",
+      "model": "gpt-6.1-sol",
       "family": "openai",
       "adapter": "codex",
       "lane": "material-review",
@@ -63,8 +63,8 @@
       "review_policy": "optional"
     },
     {
-      "profile": "terra-reviewer",
-      "model": "gpt-5.6-terra",
+      "profile": "sol-reviewer",
+      "model": "gpt-6.1-sol",
       "family": "openai",
       "adapter": "codex",
       "lane": "security",
@@ -134,7 +134,7 @@
     },
     {
       "profile": "sonnet-clerk",
-      "model": "claude-sonnet-5",
+      "model": "claude-sonnet-5-5",
       "family": "anthropic",
       "adapter": "claude-code",
       "lane": "clerk",
@@ -148,7 +148,7 @@
     },
     {
       "profile": "sonnet-scout",
-      "model": "claude-sonnet-5",
+      "model": "claude-sonnet-5-5",
       "family": "anthropic",
       "adapter": "claude-code",
       "lane": "scout",
@@ -162,7 +162,7 @@
     },
     {
       "profile": "sonnet-reviewer",
-      "model": "claude-sonnet-5",
+      "model": "claude-sonnet-5-5",
       "family": "anthropic",
       "adapter": "claude-code",
       "lane": "routine-review",
@@ -260,7 +260,7 @@
     },
     {
       "profile": "fable-policy-annotator",
-      "model": "claude-fable-5",
+      "model": "claude-fable-5-1",
       "family": "anthropic",
       "adapter": "claude-code",
       "lane": "policy-annotation",
@@ -414,7 +414,7 @@
     },
     {
       "profile": "grok-build",
-      "model": "grok-4.6",
+      "model": "grok-4.7",
       "family": "xai",
       "adapter": "grok-build-cli",
       "lane": "builder",
@@ -428,7 +428,7 @@
     },
     {
       "profile": "grok-build",
-      "model": "grok-4.6",
+      "model": "grok-4.7",
       "family": "xai",
       "adapter": "grok-build-cli",
       "lane": "frontend-builder",
@@ -442,7 +442,7 @@
     },
     {
       "profile": "grok-build",
-      "model": "grok-4.6",
+      "model": "grok-4.7",
       "family": "xai",
       "adapter": "grok-build-cli",
       "lane": "policy-annotation",

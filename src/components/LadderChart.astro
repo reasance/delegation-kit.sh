@@ -16,7 +16,10 @@ const best = dots[0];
 if (best.id !== opus.model || best.index !== cuts.top)
   throw new Error('LadderChart: the copy says the frontier example, Opus 5.5, is the best of the day');
 
-const under = (cuts.mid - luna.index).toFixed(1);
+// The copy says Luna clears the mid line; fail the build if a refresh moves it.
+if (luna.index < cuts.mid) throw new Error('LadderChart: the copy says Luna clears the mid line');
+const over = (luna.index - cuts.mid).toFixed(1);
+const unscored = (catalog.models as M[]).filter((m) => typeof m.index !== 'number').map((m) => m.id);
 const R = 5.5;
 
 /** Precomputed beeswarm: a dot rises one level when it would touch another. */
@@ -70,7 +73,7 @@ const css = `
 .lc-d{display:none}
 @media (min-width:1024px){.lc-d{display:block}.lc-m{display:none}}
 `;
-const desc = `Artificial Analysis Intelligence Index scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) is mid, ${luna.name} (${luna.index}) is small, ${under} below mid.`;
+const desc = `Artificial Analysis Intelligence Index scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) and ${luna.name} (${luna.index}) are mid, Luna ${over} above the mid line.`;
 const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} · ${d.m.tier}`;
 ---
 
@@ -128,7 +131,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
       <text x={at(hd, flash.model).cx - 6} y="74" class="sm">{flash.index.toFixed(1)}</text>
       <path d={`M${at(hd, luna.model).cx} ${at(hd, luna.model).cy - 7} V96`} class="leader"></path>
       <text x={at(hd, luna.model).cx - 7} y="104" class="end b halo">{luna.name}</text>
-      <text x={at(hd, luna.model).cx - 7} y="118" class="end sm soft halo">{luna.index.toFixed(1)}, {under} below mid</text>
+      <text x={at(hd, luna.model).cx - 7} y="118" class="end sm soft halo">{luna.index.toFixed(1)}, {over} above mid</text>
     </g>
   </svg>
 
@@ -179,8 +182,8 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
       <text x="130" y={at(vd, opus.model).cy + 18} class="sm soft">best of the day</text>
       <text x="130" y={at(vd, flash.model).cy + 4} class="b">{flash.name} {flash.index.toFixed(1)}</text>
       <text x="130" y={at(vd, luna.model).cy + 18} class="b">{luna.name} {luna.index.toFixed(1)}</text>
-      <text x="130" y={at(vd, luna.model).cy + 32} class="sm soft">small: {under} below mid</text>
+      <text x="130" y={at(vd, luna.model).cy + 32} class="sm soft">mid: {over} above the line</text>
     </g>
   </svg>
-  <p class="sr-only">{n} models plotted; claude-haiku-4-5 has no score yet.</p>
+  <p class="sr-only">{n} models plotted{unscored.length ? `; ${unscored.join(', ')} ${unscored.length === 1 ? 'has' : 'have'} no score yet` : ''}.</p>
 </div>

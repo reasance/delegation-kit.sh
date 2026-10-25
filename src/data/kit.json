@@ -1,6 +1,6 @@
 {
-  "version": "0.34.1",
-  "releaseDate": "2026-10-24",
+  "version": "0.35.0",
+  "releaseDate": "2026-10-25",
   "schemaVersion": 3,
   "reviewPolicy": "optional",
   "profiles": 28,
@@ -50,7 +50,7 @@
   "profileConfig": {
     "luna-clerk": {
       "adapter": "codex",
-      "model": "gpt-5.6-luna",
+      "model": "gpt-6-luna",
       "family": "openai",
       "roles": [
         "clerk"
@@ -59,9 +59,9 @@
         "effort": "max"
       }
     },
-    "terra-builder": {
+    "sol-builder": {
       "adapter": "codex",
-      "model": "gpt-5.6-terra",
+      "model": "gpt-6.1-sol",
       "family": "openai",
       "roles": [
         "builder"
@@ -70,9 +70,9 @@
         "effort": "max"
       }
     },
-    "terra-reviewer": {
+    "sol-reviewer": {
       "adapter": "codex",
-      "model": "gpt-5.6-terra",
+      "model": "gpt-6.1-sol",
       "family": "openai",
       "roles": [
         "routine-review",
@@ -109,7 +109,7 @@
     },
     "sonnet-clerk": {
       "adapter": "claude-code",
-      "model": "claude-sonnet-5",
+      "model": "claude-sonnet-5-5",
       "family": "anthropic",
       "roles": [
         "clerk"
@@ -120,7 +120,7 @@
     },
     "sonnet-scout": {
       "adapter": "claude-code",
-      "model": "claude-sonnet-5",
+      "model": "claude-sonnet-5-5",
       "family": "anthropic",
       "roles": [
         "scout"
@@ -131,7 +131,7 @@
     },
     "sonnet-reviewer": {
       "adapter": "claude-code",
-      "model": "claude-sonnet-5",
+      "model": "claude-sonnet-5-5",
       "family": "anthropic",
       "roles": [
         "routine-review"
@@ -188,7 +188,7 @@
     },
     "fable-policy-annotator": {
       "adapter": "claude-code",
-      "model": "claude-fable-5",
+      "model": "claude-fable-5-1",
       "family": "anthropic",
       "roles": [
         "policy-annotation"
@@ -269,7 +269,7 @@
     },
     "grok-build": {
       "adapter": "grok-build-cli",
-      "model": "grok-4.6",
+      "model": "grok-4.7",
       "family": "xai",
       "roles": [
         "builder",
@@ -423,5 +423,5 @@
       }
     }
   },
-  "syncedAt": "2026-10-24"
+  "syncedAt": "2026-10-25"
 }

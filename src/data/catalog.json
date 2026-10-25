@@ -1,12 +1,12 @@
 {
-  "catalogVersion": "2026-10-24",
+  "catalogVersion": "2026-10-25",
   "tiering": {
     "rule": "index-bands-v1",
     "frontier_within": 8,
     "mid_within": 20,
     "top_index": 57.6,
     "source": "artificialanalysis",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "attribution": "https://artificialanalysis.ai/"
   },
   "models": [
@@ -16,7 +16,7 @@
       "tier": "frontier",
       "index": 57.6,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 4,
         "out": 20
@@ -28,7 +28,7 @@
       "tier": "frontier",
       "index": 56,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 2,
         "out": 10
@@ -40,11 +40,8 @@
       "tier": "frontier",
       "index": 55.8,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 4,
-        "out": 20
-      }
+      "source": "artificialanalysis:2026-10-25",
+      "price": null
     },
     {
       "id": "kimi-k3.1-pro",
@@ -52,7 +49,7 @@
       "tier": "frontier",
       "index": 55.1,
       "variant": "default",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 2,
         "out": 10
@@ -64,7 +61,7 @@
       "tier": "frontier",
       "index": 53.4,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 10,
         "out": 50
@@ -76,10 +73,22 @@
       "tier": "frontier",
       "index": 52.7,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 10,
         "out": 50
+      }
+    },
+    {
+      "id": "gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "tier": "frontier",
+      "index": 52.6,
+      "variant": "high",
+      "source": "artificialanalysis:2026-10-25",
+      "price": {
+        "in": 2,
+        "out": 10
       }
     },
     {
@@ -88,7 +97,7 @@
       "tier": "frontier",
       "index": 52.4,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 4,
         "out": 20
@@ -100,34 +109,10 @@
       "tier": "frontier",
       "index": 51.8,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 2,
         "out": 10
-      }
-    },
-    {
-      "id": "claude-opus-5",
-      "name": "Claude Opus 5",
-      "tier": "frontier",
-      "index": 50.8,
-      "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 5,
-        "out": 25
-      }
-    },
-    {
-      "id": "claude-fable-5",
-      "name": "Claude Fable 5",
-      "tier": "frontier",
-      "index": 49.6,
-      "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 10,
-        "out": 50
       }
     },
     {
@@ -136,22 +121,10 @@
       "tier": "mid",
       "index": 48.1,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 1.25,
         "out": 4.25
-      }
-    },
-    {
-      "id": "gpt-5.6-sol",
-      "name": "GPT-5.6 Sol",
-      "tier": "mid",
-      "index": 47,
-      "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 4,
-        "out": 20
       }
     },
     {
@@ -160,7 +133,7 @@
       "tier": "mid",
       "index": 46.4,
       "variant": "xhigh",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 2,
         "out": 6
@@ -172,34 +145,34 @@
       "tier": "mid",
       "index": 45.4,
       "variant": "default",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 2,
         "out": 6
       }
     },
     {
-      "id": "grok-4.6",
-      "name": "Grok 4.6",
+      "id": "deepseek-flash",
+      "name": "DeepSeek V4.1 Flash 1017",
       "tier": "mid",
-      "index": 44.2,
-      "variant": "xhigh",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 2,
-        "out": 6
-      }
-    },
-    {
-      "id": "kimi-k3",
-      "name": "Kimi K3",
-      "tier": "mid",
-      "index": 43.6,
+      "index": 45.1,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
-        "in": 0.5,
-        "out": 2
+        "in": 0.3,
+        "out": 1.2
+      }
+    },
+    {
+      "id": "glm-5.3",
+      "name": "GLM-5.3",
+      "tier": "mid",
+      "index": 44.8,
+      "variant": "max",
+      "source": "artificialanalysis:2026-10-25",
+      "price": {
+        "in": 1.4,
+        "out": 4.4
       }
     },
     {
@@ -208,7 +181,7 @@
       "tier": "mid",
       "index": 43.4,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 0.1,
         "out": 0.5
@@ -220,22 +193,10 @@
       "tier": "mid",
       "index": 42.7,
       "variant": "default",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 0.15,
         "out": 0.6
-      }
-    },
-    {
-      "id": "gpt-5.6-terra",
-      "name": "GPT-5.6 Terra",
-      "tier": "mid",
-      "index": 42.1,
-      "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 2,
-        "out": 12
       }
     },
     {
@@ -244,7 +205,7 @@
       "tier": "mid",
       "index": 41.8,
       "variant": "default",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 0.15,
         "out": 0.5
@@ -256,106 +217,94 @@
       "tier": "mid",
       "index": 40.9,
       "variant": "high",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
         "in": 0.75,
         "out": 3.75
       }
     },
     {
-      "id": "deepseek-flash",
-      "name": "DeepSeek V4.1 Flash",
-      "tier": "mid",
-      "index": 39.5,
-      "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 0.3,
-        "out": 1.2
-      }
-    },
-    {
-      "id": "gpt-5.5",
-      "name": "GPT-5.5",
+      "id": "mistral-large-4",
+      "name": "Mistral Large 4",
       "tier": "mid",
       "index": 38.4,
-      "variant": "xhigh",
-      "source": "artificialanalysis:2026-10-24",
+      "variant": "default",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
-        "in": 5,
-        "out": 30
+        "in": 1.36,
+        "out": 4.18
       }
     },
     {
-      "id": "claude-sonnet-5",
-      "name": "Claude Sonnet 5",
+      "id": "gpt-6-luna",
+      "name": "GPT-6 Luna",
       "tier": "mid",
-      "index": 38.2,
+      "index": 38.1,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
-        "in": 3,
-        "out": 15
+        "in": 0.1,
+        "out": 0.5
       }
     },
     {
-      "id": "gpt-5.6-luna",
-      "name": "GPT-5.6 Luna",
+      "id": "deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
       "tier": "small",
-      "index": 37.3,
+      "index": 36,
       "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
-        "in": 0.2,
-        "out": 1.2
+        "in": 1.32,
+        "out": 3.96
       }
     },
     {
-      "id": "glm-5.2",
-      "name": "GLM-5.2",
+      "id": "mistral-medium-3.5",
+      "name": "Mistral Medium 3.5",
       "tier": "small",
-      "index": 33.7,
-      "variant": "max",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 0.98,
-        "out": 3.08
-      }
-    },
-    {
-      "id": "gemini-3.1-pro-preview",
-      "name": "Gemini 3.1 Pro Preview",
-      "tier": "small",
-      "index": 29.7,
+      "index": 14.2,
       "variant": "default",
-      "source": "artificialanalysis:2026-10-24",
+      "source": "artificialanalysis:2026-10-25",
       "price": {
-        "in": 1.25,
-        "out": 5
+        "in": 1.5,
+        "out": 7.5
       }
     },
     {
-      "id": "mistral-large-3",
-      "name": "Mistral Large 3",
-      "tier": "small",
-      "index": 9.3,
-      "variant": "default",
-      "source": "artificialanalysis:2026-10-24",
-      "price": {
-        "in": 2,
-        "out": 6
-      }
-    },
-    {
-      "id": "claude-haiku-4-5",
+      "id": "mistral-small-2603",
       "name": null,
-      "tier": "small",
+      "tier": null,
       "index": null,
       "variant": null,
       "source": "hand",
       "price": {
-        "in": 1,
-        "out": 5
+        "in": 0.15,
+        "out": 0.6
+      }
+    },
+    {
+      "id": "muse-spark-1.3-contributor",
+      "name": null,
+      "tier": null,
+      "index": null,
+      "variant": null,
+      "source": "hand",
+      "price": {
+        "in": 0.1,
+        "out": 0.2
+      }
+    },
+    {
+      "id": "qwen3.8-flash",
+      "name": null,
+      "tier": null,
+      "index": null,
+      "variant": null,
+      "source": "hand",
+      "price": {
+        "in": 0.15,
+        "out": 0.47
       }
     }
   ]

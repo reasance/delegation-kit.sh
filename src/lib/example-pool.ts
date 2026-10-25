@@ -1,12 +1,13 @@
 // The worked example that runs through the home page: three models from three
-// vendors, one per tier, each one a profile the default install ships —
-// GPT-5.6 Luna (small, luna-clerk, through Codex), DeepSeek Flash (mid,
+// vendors, each one a profile the default install ships — GPT-6 Luna (mid,
+// luna-clerk, through Codex; kit 0.35.0 and later), DeepSeek Flash (mid,
 // deepseek-flash, an API key) and Claude Opus 5.5 (frontier, opus-reviewer,
-// through Claude Code; kit 0.27.2 and later). Every number comes from src/data/catalog.json at build
-// time, and `route()` mirrors floor-v1's `choose()` in the kit
-// (bin/lib/delegation_router_policy.py) for the requests the page shows. The
-// same pool was checked with the kit's own `delegation-router check` and
-// `choose()` on 2026-10-19, with opus-reviewer on claude-opus-5-5. If the catalog moves a model to another tier, or
+// through Claude Code). Luna clears the mid line by half a point and is the
+// cheapest, so it answers everything below the frontier; DeepSeek Flash is the
+// default, answering when the decider can't. Every number comes from
+// src/data/catalog.json at build time, and `route()` mirrors floor-v1's
+// `choose()` in the kit (bin/lib/delegation_router_policy.py) for the requests
+// the page shows. If the catalog moves a model to another tier, or
 // a request would land elsewhere, the build fails here instead of publishing
 // copy that no longer matches the router.
 import catalog from '../data/catalog.json';
@@ -68,7 +69,7 @@ function profile(id: string, model: string, name: string, via: string, expected:
   return { id, model, name, via, tier: expected, index: m.index, price: m.price, code: true, tierSource: m.source };
 }
 
-export const luna = profile('luna-clerk', 'gpt-5.6-luna', 'GPT-5.6 Luna', 'through Codex', 'small');
+export const luna = profile('luna-clerk', 'gpt-6-luna', 'GPT-6 Luna', 'through Codex', 'mid');
 export const flash = profile('deepseek-flash', 'deepseek-flash', 'DeepSeek Flash', 'an API key', 'mid');
 export const opus = profile('opus-reviewer', 'claude-opus-5-5', 'Claude Opus 5.5', 'through Claude Code', 'frontier');
 /** The pool in the order the config lists it; flash is the default and the decider. */
@@ -143,8 +144,8 @@ export const examples: Example[] = [
   example(
     'Summarise this contract',
     { difficulty: 2, tags: [], confidence: 0.8 },
-    flash,
-    `Minimum ${cuts.mid}: Luna (${luna.index}) falls short; DeepSeek Flash (${flash.index}) is the cheapest above.`
+    luna,
+    `Minimum ${cuts.mid}: Luna (${luna.index}) clears it and is the cheapest that does.`
   ),
   example(
     'Find the race condition in this scheduler',
@@ -161,8 +162,8 @@ export const examples: Example[] = [
   example(
     'What is 17% of 2,340?',
     { difficulty: 1, tags: ['math'], confidence: 0.8 },
-    flash,
-    `Easy, but math raises the minimum to ${cuts.mid}: DeepSeek Flash.`
+    luna,
+    `Easy, but math raises the minimum to ${cuts.mid}: Luna (${luna.index}) still clears it.`
   ),
   example(
     'Any request, when the decider times out',
@@ -183,7 +184,7 @@ export const rating = (v: Verdict) => {
 const DISPLAY: Record<string, string> = {
   'deepseek-flash': 'DeepSeek Flash',
   'glm-5.3-flash': 'GLM 5.3 Flash',
-  'glm-5.2': 'GLM 5.2',
+  'deepseek-v4-pro': 'DeepSeek V4 Pro',
   'minimax-m3.1-flash': 'MiniMax M3.1 Flash'
 };
 
@@ -208,25 +209,26 @@ function catalogProfile(model: string): Profile {
  * The hero shows its three requests against four sets of your models from
  * different vendors, the example's own first. Each set lists, for each row,
  * the model the rule sends that request to; the build checks it. A model can
- * answer more than one row: MiniMax M3.1 Flash is mid, yet cheaper than any
- * small model, so it takes the easy request too.
+ * answer more than one row: a cheap mid model (Luna, MiniMax M3.1 Flash, GLM
+ * 5.3 Flash) takes the easy request and the medium one; only the last set has
+ * a small model, DeepSeek V4 Pro, which stops at the easy one.
  */
 const SETS: { models: string[]; answers: [string, string, string] }[] = [
   {
-    models: ['gpt-5.6-luna', 'deepseek-flash', 'claude-opus-5-5'],
-    answers: ['gpt-5.6-luna', 'deepseek-flash', 'claude-opus-5-5']
+    models: ['gpt-6-luna', 'deepseek-flash', 'claude-opus-5-5'],
+    answers: ['gpt-6-luna', 'gpt-6-luna', 'claude-opus-5-5']
   },
   {
     models: ['minimax-m3.1-flash', 'claude-sonnet-5-5'],
     answers: ['minimax-m3.1-flash', 'minimax-m3.1-flash', 'claude-sonnet-5-5']
   },
   {
-    models: ['glm-5.2', 'gemini-3.8-flash', 'gpt-6.1-sol'],
-    answers: ['glm-5.2', 'gemini-3.8-flash', 'gpt-6.1-sol']
+    models: ['glm-5.3-flash', 'gemini-3.8-flash', 'gpt-6.1-sol'],
+    answers: ['glm-5.3-flash', 'glm-5.3-flash', 'gpt-6.1-sol']
   },
   {
-    models: ['gemini-3.1-pro-preview', 'qwen3.8-max', 'gpt-6-astra'],
-    answers: ['gemini-3.1-pro-preview', 'qwen3.8-max', 'gpt-6-astra']
+    models: ['deepseek-v4-pro', 'qwen3.8-max', 'gpt-6-astra'],
+    answers: ['deepseek-v4-pro', 'qwen3.8-max', 'gpt-6-astra']
   }
 ];
 
