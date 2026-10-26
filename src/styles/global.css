@@ -13,10 +13,12 @@
 @theme {
   --color-paper: #eef0f3;
   --color-panel: #f7f8fa;
-  --color-ink: #10192b;
+  --color-ink: #181818;
   --color-ink-soft: #4a5568;
   --color-line: #c9ced8;
-  --color-line-strong: #10192b;
+  --color-line-strong: #181818;
+  /* The ink button's hover: the next approved dark step. */
+  --color-ink-hover: #313131;
 
   --color-qualified: #1f8a5b;
   --color-explicit: #d98e04;
@@ -33,9 +35,21 @@
   /* The same green, dark enough for small text on paper and qualified-soft. */
   --color-qualified-text: #176b47;
 
-  --font-display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
-  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  /* One family: Geist for everything, Geist Mono for code and data. */
+  --font-display: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* The base curve for interface motion: hovers, reveals, the nav. */
+  --ease-base: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Showcase motion (the home page's diagrams): entrance transforms, opacity
+ * and blur, and wipes or glides that start and stop on the design. */
+:root {
+  --e: cubic-bezier(0.16, 1, 0.3, 1);
+  --e2: cubic-bezier(0.33, 1, 0.68, 1);
+  --io: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 html,
@@ -43,8 +57,8 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 body {
@@ -53,17 +67,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1,
-h2,
-h3,
-.display {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  font-variation-settings:
-    'wdth' 90,
-    'opsz' 48;
+/* In the base layer, so each heading takes the line height its Tailwind
+ * size pairs with. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
 }
 
 code,
@@ -100,11 +118,12 @@ summary:focus-visible {
   border-top: 1px solid var(--color-line-strong);
 }
 
+/* A small mono label in sentence case, tracked open a little. */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  line-height: 1rem;
+  letter-spacing: 0.02em;
   color: var(--color-ink-soft);
 }
 
@@ -152,6 +171,32 @@ summary:focus-visible {
 .status-excluded {
   background: var(--color-explicit);
   color: var(--color-ink);
+}
+
+/* Scroll reveals. `motion` is set on <html> before first paint only when
+ * motion is allowed and the script can run (BaseLayout), so without it every
+ * element is simply there. Each element rises once as it enters the view;
+ * `--d` staggers siblings. `up` is the diagrams' rise: shorter, with blur. */
+.motion [data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-base),
+    transform 0.7s var(--ease-base);
+  transition-delay: var(--d, 0s);
+}
+.motion [data-reveal]:not(.is-in) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.motion [data-reveal='up'] {
+  transition:
+    opacity 0.75s var(--e2),
+    filter 0.75s var(--e2),
+    transform 1.05s var(--e);
+  transition-delay: var(--d, 0s);
+}
+.motion [data-reveal='up']:not(.is-in) {
+  transform: translateY(10px);
+  filter: blur(4px);
 }
 
 @media (prefers-reduced-motion: reduce) {
