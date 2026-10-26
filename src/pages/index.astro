@@ -21,47 +21,62 @@ reply = client.chat.completions.create(
     messages=[{"role": "user", "content": "Rename foo to bar in utils.py"}],
 )`;
 
-const link = 'underline underline-offset-4 text-[var(--color-ink)]';
-const step = 'border-t border-[var(--color-line)] pt-4';
+const link =
+  'underline underline-offset-4 decoration-[var(--color-line)] text-[var(--color-ink)] transition-colors duration-300 ease-base hover:decoration-[var(--color-ink)]';
+const btn = 'btn inline-block px-3 py-2 text-base font-semibold';
 const stepNum = 'font-mono text-[var(--color-ink-soft)] text-sm';
-const stepTitle = 'text-xl mt-2 mb-2 leading-tight';
-const useRow = 'border-t border-[var(--color-line)] pt-5 grid gap-5 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-10';
+const stepTitle = 'text-xl mt-2 mb-2';
+const pickRow = 'border-t border-[var(--color-line)] pt-4 grid gap-2 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-10';
+const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-10';
 ---
 
 <BaseLayout path="/">
   <!-- Hero -->
-  <section class="pt-10 pb-14 md:pt-16 md:pb-16">
-    <p class="eyebrow mb-6">A model router on your own machine</p>
-    <h1 class="text-[2.6rem] md:text-[3.4rem] xl:text-[3.9rem] [text-wrap:balance]">
-      <span class="lg:block">Easy requests go to your cheap models.</span>
-      <span class="lg:block">Hard ones go to your strong ones.</span>
+  <section class="pt-10 pb-16 md:pt-16 md:pb-20">
+    <p class="eyebrow mb-6" data-reveal>A model router on your own machine</p>
+    <h1
+      class="hero-title max-w-2xl text-4xl sm:text-5xl md:text-6xl tracking-tight"
+      data-reveal
+      style="--d: 0.08s"
+    >
+      Easy requests go to your cheap models. Hard ones go to your strong ones.
     </h1>
-    <p class="mt-8 max-w-2xl text-lg md:text-xl text-[var(--color-ink-soft)]">
+    <p
+      class="mt-8 max-w-2xl text-lg md:text-xl text-[var(--color-ink-soft)]"
+      data-reveal
+      style="--d: 0.16s"
+    >
       Your app sends its requests to delegation-kit instead of to one provider. A decider you pick rates
       how hard each request is, and the cheapest of your models that can handle it answers. Every answer
       says which model wrote it, and why.
     </p>
-    <p class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <a href="/docs/" class="btn px-4 py-2">Get started →</a>
-      <a href="#use" class={link}>How you use it ↓</a>
-    </p>
+    <div class="mt-8" data-reveal style="--d: 0.24s">
+      <p class="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <a href="/docs/" class={btn}>Get started →</a>
+        <a href="#use" class={link}>How you use it ↓</a>
+      </p>
+      <p class="mt-3 text-sm text-[var(--color-ink-soft)]">
+        Free and open source under MIT. Runs on your Mac, with your own keys.
+      </p>
+    </div>
     <div class="mt-12">
       <ExampleTable
         count={3}
         rotate
-        caption={`Sent with "model": "auto", shown with four sets of your models from different vendors: in each, the cheapest model whose score reaches the request's minimum answers, whatever its tier. The setup below uses the first: ${models}.`}
+        story
+        caption={`The answer column cycles through four sets of models from different vendors; in each, the cheapest model that reaches the request's minimum answers. The setup below uses the first: ${models}.`}
       />
     </div>
   </section>
 
   <!-- How you use it -->
-  <section id="use" class="rule py-14 scroll-mt-4">
-    <h2 class="text-3xl md:text-4xl mb-3">How you use it</h2>
-    <p class="text-[var(--color-ink-soft)] max-w-xl mb-10">
+  <section id="use" class="rule pt-16 pb-20 scroll-mt-20">
+    <h2 class="text-3xl md:text-4xl mb-3" data-reveal>How you use it</h2>
+    <p class="text-[var(--color-ink-soft)] max-w-xl mb-10" data-reveal style="--d: 0.08s">
       Three steps. In your app, only the address and the model name change.
     </p>
     <ol role="list" class="grid gap-10">
-      <li class={useRow}>
+      <li class={useRow} data-reveal>
         <div>
           <span class={stepNum} aria-hidden="true">1</span>
           <h3 class={stepTitle}>Install it</h3>
@@ -71,16 +86,17 @@ const useRow = 'border-t border-[var(--color-line)] pt-5 grid gap-5 lg:grid-cols
             MiniMax). Keys go in
             <code class="font-mono text-[0.9em]">~/.config/delegation-kit/.env</code>, a file only you can
             read. <a href="/docs/configuration/#adding-a-model" class={link}>Any other model</a> with an
-            OpenAI-compatible API can be added, a local one too.
+            API compatible with OpenAI's can be added, a local one too.
           </p>
         </div>
         <CodeBlock
           label="Terminal"
+          typing
           code={`npx delegation-kit
 delegation-config show  # your models`}
         />
       </li>
-      <li class={useRow}>
+      <li class={useRow} data-reveal>
         <div>
           <span class={stepNum} aria-hidden="true">2</span>
           <h3 class={stepTitle}>Choose your models and the decider</h3>
@@ -91,7 +107,7 @@ delegation-config show  # your models`}
         </div>
         <CodeBlock lang="json" label="~/.config/delegation-kit/config.json, next to “profiles”" code={config} />
       </li>
-      <li class={useRow}>
+      <li class={useRow} data-reveal>
         <div>
           <span class={stepNum} aria-hidden="true">3</span>
           <h3 class={stepTitle}>Start it and point your app at it</h3>
@@ -110,35 +126,41 @@ delegation-config show  # your models`}
         </div>
       </li>
     </ol>
-    <p class="mt-10">
-      <a href="/docs/" class="btn px-4 py-2">Get started, step by step →</a>
+    <p class="mt-10" data-reveal>
+      <a href="/docs/" class={btn}>Get started, step by step →</a>
     </p>
   </section>
 
   <!-- How it picks a model -->
-  <section id="how" class="rule py-14 scroll-mt-4">
-    <h2 class="text-3xl md:text-4xl mb-10">How it picks a model</h2>
-    <ol role="list" class="grid gap-x-8 gap-y-8 md:grid-cols-3">
-      <li class={step}>
-        <span class={stepNum} aria-hidden="true">1</span>
-        <h3 class={stepTitle}>Every model gets a score</h3>
-        <p class="text-[var(--color-ink-soft)]">
+  <section id="how" class="rule pt-16 pb-20 scroll-mt-20">
+    <h2 class="text-3xl md:text-4xl mb-10" data-reveal>How it picks a model</h2>
+    <ol role="list" class="grid gap-8">
+      <li class={pickRow} data-reveal>
+        <div>
+          <span class={stepNum} aria-hidden="true">1</span>
+          <h3 class={stepTitle}>Every model gets a score</h3>
+        </div>
+        <p class="text-[var(--color-ink-soft)] max-w-2xl">
           Artificial Analysis, an independent lab, gives every model the same tests and a score. Within 8
           points of the day's best: frontier. Within 20: mid. The rest: small.
         </p>
       </li>
-      <li class={step}>
-        <span class={stepNum} aria-hidden="true">2</span>
-        <h3 class={stepTitle}>Your decider rates the request</h3>
-        <p class="text-[var(--color-ink-soft)]">
+      <li class={pickRow} data-reveal>
+        <div>
+          <span class={stepNum} aria-hidden="true">2</span>
+          <h3 class={stepTitle}>Your decider rates the request</h3>
+        </div>
+        <p class="text-[var(--color-ink-soft)] max-w-2xl">
           It reads an excerpt, never your keys or your list of models, and answers: how hard is this, 0
           to 4, half points allowed? Code, math, rare knowledge?
         </p>
       </li>
-      <li class={step}>
-        <span class={stepNum} aria-hidden="true">3</span>
-        <h3 class={stepTitle}>The cheapest one strong enough answers</h3>
-        <p class="text-[var(--color-ink-soft)]">
+      <li class={pickRow} data-reveal>
+        <div>
+          <span class={stepNum} aria-hidden="true">3</span>
+          <h3 class={stepTitle}>The cheapest one strong enough answers</h3>
+        </div>
+        <p class="text-[var(--color-ink-soft)] max-w-2xl">
           The rating sets a minimum score: none for 0–1, {cuts.mid} for 2, {cuts.frontier} for 3–4,
           in between for half points. Math or rare knowledge: {cuts.mid} at least. The cheapest of your
           models above it answers; none above? Your strongest. No rating? Your default.
@@ -146,17 +168,18 @@ delegation-config show  # your models`}
       </li>
     </ol>
 
-    <div class="mt-14">
-      <p class="eyebrow mb-4">Scores on {catalogVersion}</p>
+    <div class="mt-16">
+      <p class="eyebrow mb-4" data-reveal>Scores on {catalogVersion}</p>
       <LadderChart />
       <p class="mt-4 max-w-2xl text-[var(--color-ink-soft)]">
-        Ringed: the three models in the examples. Refresh the scores with your own Artificial Analysis
-        key, or set any model's tier yourself.
+        Ringed: the three models in the examples. The amber line is a request's minimum score: the
+        cheapest ringed model at or above it answers. Refresh the scores with your own Artificial
+        Analysis key, or set any model's tier yourself.
       </p>
     </div>
 
-    <div class="mt-14">
-      <h3 class="text-2xl mb-6">With your three models</h3>
+    <div class="mt-16">
+      <h3 class="text-2xl mb-6" data-reveal>With your three models</h3>
       <ExampleTable
         why
         caption="Costs are the router's estimates at API prices, used to compare models; a model you reach through a subscription is billed by your plan."
@@ -170,10 +193,32 @@ delegation-config show  # your models`}
 
 </BaseLayout>
 
+<script>
+  import '../scripts/motion';
+</script>
+
 <style>
-  /* An ink button: paper text on ink. */
+  /* An ink button: paper text on ink. It lifts to the next dark step on
+   * hover and gives a little on press. */
   .btn {
     background: var(--color-ink);
     color: var(--color-paper);
+    transition:
+      background-color 0.3s var(--ease-base),
+      transform 0.3s var(--ease-base);
+  }
+  .btn:hover {
+    background: var(--color-ink-hover);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  /* The hero line: ink fading to grey, left to right, on the text only. */
+  .hero-title {
+    background: linear-gradient(to right, #000000, #666666);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 </style>

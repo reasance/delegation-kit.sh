@@ -19,9 +19,11 @@ interface Props {
   why?: boolean;
   /** Cycle the three rows together through the hero's model sets. */
   rotate?: boolean;
+  /** Home page story: the decider rates the rows one by one (scripts/motion.ts). */
+  story?: boolean;
   caption: string;
 }
-const { count = examples.length, why = false, rotate = false, caption } = Astro.props;
+const { count = examples.length, why = false, rotate = false, story = false, caption } = Astro.props;
 const rows = examples.slice(0, count).map((x, i) => ({
   ...x,
   options: rotate ? heroOptions[i] : []
@@ -51,15 +53,15 @@ const motion =
 
 const css = `
 .xt{width:100%;border-collapse:collapse}
-.xt th{font-family:var(--font-mono);font-size:.72rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--color-ink-soft);text-align:left;padding:0 .9rem .6rem 0}
-.xt td{border-top:1px solid var(--color-line);padding:.8rem .9rem .8rem 0;vertical-align:top}
+.xt th{font-family:var(--font-mono);font-size:.75rem;line-height:1rem;font-weight:500;letter-spacing:.02em;color:var(--color-ink-soft);text-align:left;padding:0 1rem .5rem 0}
+.xt td{border-top:1px solid var(--color-line);padding:.75rem 1rem .75rem 0;vertical-align:top;transition:background-color .3s var(--ease-base),box-shadow .3s var(--ease-base)}
 .xt tr:last-child td{border-bottom:1px solid var(--color-line)}
-.xt .req{font-family:var(--font-mono);font-size:.88rem;color:var(--color-ink)}
-.xt .rate{font-family:var(--font-mono);font-size:.82rem;color:var(--color-explicit-text);white-space:nowrap}
+.xt .req{font-family:var(--font-mono);font-size:.875rem;color:var(--color-ink)}
+.xt .rate{font-family:var(--font-mono);font-size:.875rem;color:var(--color-explicit-text);white-space:nowrap}
 .xt .who{font-weight:600;color:var(--color-ink)}
 .xt .cost{display:block;font-family:var(--font-mono);font-size:.75rem;color:var(--color-ink-soft);margin-top:.15rem}
 .xt .why{color:var(--color-ink-soft)}
-.xt .tier{display:inline-block;margin-left:.4rem;padding:0 .35rem;font-family:var(--font-mono);font-size:.7rem;font-weight:500;line-height:1.35rem;border:1px solid var(--color-line);color:var(--color-ink-soft);vertical-align:1px}
+.xt .tier{display:inline-block;margin-left:.5rem;padding:0 .25rem;font-family:var(--font-mono);font-size:.75rem;font-weight:500;line-height:1.25rem;border:1px solid var(--color-line);color:var(--color-ink-soft);vertical-align:1px}
 .xt .tier-mid{border-color:var(--color-ink-soft);color:var(--color-ink)}
 .xt .tier-frontier{background:var(--color-ink);border-color:var(--color-ink);color:var(--color-paper)}
 .xt .lbl{display:none}
@@ -70,12 +72,16 @@ const css = `
 .xt .rot .cost{margin:.1rem 0 0 5.4rem}
 ${motion}
 @media (prefers-reduced-motion:reduce){.xt .rot-list{animation:none!important}}
+.xt tr.is-on td{background:var(--color-panel)}
+.xt tr.is-on td:first-child{box-shadow:-.75rem 0 0 var(--color-panel)}
+.xt .rate-in{transition:background-color .3s var(--ease-base),box-shadow .3s var(--ease-base)}
+.xt tr.is-on .rate-in{background:var(--color-explicit-soft);box-shadow:0 0 0 .25rem var(--color-explicit-soft)}
 @media (max-width:767px){
 .xt thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .xt tr{display:block;border-top:1px solid var(--color-line);padding:.75rem 0}
 .xt tr:last-child{border-bottom:1px solid var(--color-line)}
 .xt td,.xt tr:last-child td{display:block;border:0;padding:.15rem 0}
-.xt .lbl{display:inline-block;min-width:6.5rem;font-family:var(--font-mono);font-size:.72rem;color:var(--color-ink-soft)}
+.xt .lbl{display:inline-block;min-width:6.5rem;font-family:var(--font-mono);font-size:.75rem;color:var(--color-ink-soft)}
 .xt .cost{margin:.1rem 0 0 6.5rem}
 .xt .rot .cost{margin:.1rem 0 0 5.4rem}
 .xt .rot{display:block;margin:.35rem 0 0}
@@ -86,7 +92,7 @@ ${motion}
 <style set:html={css}></style>
 
 <figure class="min-w-0">
-  <table class="xt">
+  <table class="xt" data-story={story ? 'rows' : undefined}>
     <thead>
       <tr>
         <th scope="col">You send</th>
@@ -97,12 +103,12 @@ ${motion}
     </thead>
     <tbody>
       {
-        rows.map((x) => (
-          <tr>
+        rows.map((x, i) => (
+          <tr data-reveal={story ? 'up' : undefined} style={story ? `--d: ${(0.35 + i * 0.08).toFixed(2)}s` : undefined}>
             <td class="req">{x.request}</td>
             <td class="rate">
               <span class="lbl">Rated</span>
-              {rating(x.v)}
+              <span class="rate-in">{rating(x.v)}</span>
             </td>
             {rotate ? (
               <td>

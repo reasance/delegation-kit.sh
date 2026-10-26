@@ -4,22 +4,25 @@ interface Props {
   lang?: string;
   /** Optional caption rendered above the block, e.g. the command's role. */
   label?: string;
+  /** Home page story: the command deletes and retypes itself (scripts/motion.ts). */
+  typing?: boolean;
 }
-const { code, lang = 'sh', label } = Astro.props;
+const { code, lang = 'sh', label, typing = false } = Astro.props;
 // `cb-wrap` is the layout hook prose.css uses for vertical rhythm.
 ---
 
 <div class="cb-wrap min-w-0">
   {
     /* Mono like an eyebrow, but not uppercased: labels can hold a file path. */
-    label && <p class="mb-2 font-mono text-[0.75rem] text-[var(--color-ink-soft)]">{label}</p>
+    label && <p class="mb-2 font-mono text-xs text-[var(--color-ink-soft)]">{label}</p>
   }
-  <div class="relative group">
+  <div class="relative group" data-reveal={typing ? 'up' : undefined}>
     <pre
-      class="bg-[var(--color-ink)] text-[var(--color-paper)] px-4 py-3 overflow-x-auto text-[0.85rem] leading-relaxed w-full"><code data-lang={lang}>{code}</code></pre>
+      data-story={typing ? 'type' : undefined}
+      class="relative bg-[var(--color-ink)] text-[var(--color-paper)] px-4 py-3 overflow-x-auto text-sm leading-relaxed w-full"><code data-lang={lang}>{code}</code></pre>
     <button
       type="button"
-      class="absolute top-2 right-2 text-xs px-2 py-1 bg-[var(--color-paper)] text-[var(--color-ink)] border border-[var(--color-line)] font-mono opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+      class="absolute top-2 right-2 text-xs px-2 py-1 bg-[var(--color-paper)] text-[var(--color-ink)] border border-[var(--color-line)] font-mono opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-300 ease-base"
       data-copy={code}
       aria-label="Copy code to clipboard"
     >
@@ -29,6 +32,25 @@ const { code, lang = 'sh', label } = Astro.props;
 </div>
 
 <style>
+  /* The typing story draws over the real code, which stays in place (and in
+   * the accessibility tree) so the block never changes size. */
+  :global(.type-ghost) {
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    margin: 0;
+    pointer-events: none;
+    white-space: pre;
+  }
+  :global(.type-caret) {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.15em;
+    margin-left: 1px;
+    vertical-align: -0.2em;
+    background: var(--color-explicit);
+  }
+
   /* Touch screens have no hover: keep the button in sight, in its own strip
    * above the first line so it never covers code. */
   @media (hover: none) {

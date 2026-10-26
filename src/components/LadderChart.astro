@@ -3,9 +3,12 @@
 // score axis, split into three tiers by index-bands-v1. The tier lines are
 // computed from catalog.json (top_index − frontier_within, top_index −
 // mid_within), never written down, so the chart follows every refresh.
-// Static: drawn in full, with no scroll-driven animation.
+// The markup is the final frame. With motion allowed, the chart draws in when
+// it scrolls into view, then plays the hero's three requests on it: an amber
+// line at each request's minimum score, the models under it dimmed, and the
+// cheapest ringed model at or above it pulsing (scripts/motion.ts).
 import catalog from '../data/catalog.json';
-import { cuts, luna, flash, opus, tiering } from '../lib/example-pool';
+import { cuts, luna, flash, opus, tiering, examples, cost } from '../lib/example-pool';
 
 type M = { id: string; tier: string | null; index: number | null };
 const dots = (catalog.models as M[])
@@ -52,10 +55,23 @@ const md = cuts.mid;
 const ticks = [0, 10, 20, 30, 40, 50, 60];
 const n = dots.length;
 
+// The story's data: the hero's three requests, and the ringed models by price.
+const beats = examples.slice(0, 3).map((x) => ({
+  rated: ['Rated ' + x.v.difficulty + ' of 4', ...x.v.tags].join(' · '),
+  min: x.r.minimum ?? 0
+}));
+const storyPool = [luna, flash, opus]
+  .map((p) => ({ id: p.model, name: p.name, index: p.index, cost: cost(p) }))
+  .sort((a, b) => a.cost - b.cost);
+const story = JSON.stringify({ beats, pool: storyPool });
+// Dots draw in left to right (bottom to top on a phone), lowest score first.
+const order = new Map([...dots].reverse().map((m, k) => [m.id, k]));
+const delay = (id: string) => `--d: ${(0.3 + order.get(id)! * 0.02).toFixed(2)}s`;
+
 const css = `
 .lc .band-f{fill:var(--color-ink);fill-opacity:.075}
 .lc .band-m{fill:var(--color-ink);fill-opacity:.035}
-.lc .bandname{font-size:11px;letter-spacing:.08em;text-transform:uppercase;fill:var(--color-ink-soft)}
+.lc .bandname{font-size:11px;letter-spacing:.02em;fill:var(--color-ink-soft)}
 .lc .axis{stroke:var(--color-ink);stroke-width:1.25}
 .lc .tick{stroke:var(--color-ink);stroke-width:1}
 .lc .best{stroke:var(--color-ink);stroke-width:2}
@@ -66,6 +82,18 @@ const css = `
 .lc .leader{fill:none;stroke:var(--color-ink-soft);stroke-width:.75}
 .lc .halo{paint-order:stroke;stroke:var(--color-paper);stroke-width:4px;stroke-linejoin:round}
 .lc .b{font-weight:500}
+.lc .floor{stroke:var(--color-explicit-strong);stroke-width:2}
+.lc .cap{fill:var(--color-explicit-text)}
+.lc .pulse{fill:none;stroke:var(--color-ink);stroke-width:1.25;opacity:0;transform-box:fill-box;transform-origin:center}
+.lc .st{opacity:0}
+.lc .pv{transition:opacity .3s var(--ease-base)}
+.lc .pv.dim{opacity:.2}
+.motion .lc .pt{transition:opacity .75s var(--e2),filter .75s var(--e2),transform 1.05s var(--e);transition-delay:var(--d);transform-box:fill-box;transform-origin:center}
+.motion .lc svg:not(.is-in) .pt{opacity:0;filter:blur(4px);transform:scale(.85)}
+.motion .lc .axis{stroke-dasharray:1;transition:stroke-dashoffset 1.1s var(--io)}
+.motion .lc svg:not(.is-in) .axis{stroke-dashoffset:1}
+.motion .lc .fx{transition:opacity .75s var(--e2);transition-delay:var(--d)}
+.motion .lc svg:not(.is-in) .fx{opacity:0}
 .lc-m{display:block;max-width:26rem}
 .lc-m text{font-size:13px}
 .lc-m .sm{font-size:12px}
@@ -80,10 +108,20 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
 <style set:html={css}></style>
 
 <div class="lc">
-  <svg class="dg lc-d" viewBox="0 0 960 256" role="img" aria-labelledby="lc-t lc-desc">
+  <svg
+    class="dg lc-d"
+    viewBox="0 0 960 256"
+    role="img"
+    aria-labelledby="lc-t lc-desc"
+    data-story="ladder"
+    data-axis="x"
+    data-o={X(0)}
+    data-k={X(1) - X(0)}
+    data-model={story}
+  >
     <title id="lc-t">Artificial Analysis scores, split into three tiers</title>
     <desc id="lc-desc">{desc}</desc>
-    <g>
+    <g class="fx" style="--d: 0.15s">
       <rect x={X(md)} y="24" width={X(f) - X(md)} height={AX - 24} class="band-m"></rect>
       <rect x={X(f)} y="24" width={X(60) - X(f)} height={AX - 24} class="band-f"></rect>
       <text x="48" y="42" class="bandname">small</text>
@@ -96,7 +134,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
     <path d={`M40 ${AX} H${X(60)}`} pathLength="1" class="axis"></path>
     {
       ticks.map((t) => (
-        <g>
+        <g class="fx" style="--d: 0.3s">
           <path d={`M${X(t)} ${AX} V${AX + 5}`} class="tick" />
           <text x={X(t)} y="188" class="mid sm soft">
             {t}
@@ -104,25 +142,35 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
         </g>
       ))
     }
-    <path d={`M${X(cuts.top)} ${AX} V100`} class="best"></path>
-    <g>
+    <path d={`M${X(cuts.top)} ${AX} V100`} class="best fx" style="--d: 1.1s"></path>
+    <g class="fx" style="--d: 1.2s">
       <path d={`M${X(cuts.top)} 226 H${X(f)}`} class="cut"></path>
       <text x={(X(cuts.top) + X(f)) / 2} y="230" class="mid sm halo">{tiering.frontier_within} points</text>
     </g>
-    <g>
+    <g class="fx" style="--d: 1.25s">
       <path d={`M${X(cuts.top)} 246 H${X(md)}`} class="cut"></path>
       <text x={(X(cuts.top) + X(md)) / 2} y="250" class="mid sm halo">{tiering.mid_within} points</text>
     </g>
+    <g class="st" aria-hidden="true">
+      <path d={`M0 24 V${AX}`} class="floor"></path>
+    </g>
     {
       hd.map((d) => (
-        <g>
+        <g class="pt" style={delay(d.m.id)} data-i={d.m.index}>
           <title>{title(d)}</title>
-          <circle cx={d.cx} cy={d.cy} r={R} class={pool.has(d.m.id) ? 'dot-pool' : 'dot'} />
-          {pool.has(d.m.id) && <circle cx={d.cx} cy={d.cy} r={R + 3.5} class="ring" />}
+          <g class="pv">
+            <circle cx={d.cx} cy={d.cy} r={R} class={pool.has(d.m.id) ? 'dot-pool' : 'dot'} />
+            {pool.has(d.m.id) && <circle cx={d.cx} cy={d.cy} r={R + 3.5} class="ring" />}
+          </g>
+          {pool.has(d.m.id) && <circle cx={d.cx} cy={d.cy} r={R + 3.5} class="pulse" data-pulse={d.m.id} />}
         </g>
       ))
     }
-    <g>
+    <g class="st" aria-hidden="true">
+      <text x="40" y="230" class="sm cap b" data-cap="rated"></text>
+      <text x="40" y="248" class="sm" data-cap="pick"></text>
+    </g>
+    <g class="fx" style="--d: 1.3s">
       <text x="916" y="60" class="end b">{opus.name}</text>
       <text x="916" y="76" class="end sm">{opus.index.toFixed(1)}</text>
       <text x="916" y="92" class="end sm">best of the day</text>
@@ -135,10 +183,20 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
     </g>
   </svg>
 
-  <svg class="dg lc-m" viewBox="0 0 360 510" role="img" aria-labelledby="lc-tm lc-descm">
+  <svg
+    class="dg lc-m"
+    viewBox="0 0 360 510"
+    role="img"
+    aria-labelledby="lc-tm lc-descm"
+    data-story="ladder"
+    data-axis="y"
+    data-o={Yv(0)}
+    data-k={Yv(1) - Yv(0)}
+    data-model={story}
+  >
     <title id="lc-tm">Artificial Analysis scores, split into three tiers</title>
     <desc id="lc-descm">{desc}</desc>
-    <g>
+    <g class="fx" style="--d: 0.15s">
       <rect x="56" y={Yv(f)} width="296" height={Yv(md) - Yv(f)} class="band-m"></rect>
       <rect x="56" y={Yv(60)} width="296" height={Yv(f) - Yv(60)} class="band-f"></rect>
       <text x="346" y={Yv(f) - 6} class="end bandname">frontier · {f.toFixed(1)}</text>
@@ -149,7 +207,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
     <path d={`M56 ${Yv(0)} V${Yv(60)}`} pathLength="1" class="axis"></path>
     {
       ticks.map((t) => (
-        <g>
+        <g class="fx" style="--d: 0.3s">
           <path d={`M51 ${Yv(t)} H56`} class="tick" />
           <text x="48" y={Yv(t) + 4} class="end sm soft">
             {t}
@@ -157,16 +215,26 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
         </g>
       ))
     }
+    <g class="st" aria-hidden="true">
+      <path d="M56 0 H352" class="floor"></path>
+    </g>
     {
       vd.map((d) => (
-        <g>
+        <g class="pt" style={delay(d.m.id)} data-i={d.m.index}>
           <title>{title(d)}</title>
-          <circle cx={d.cx} cy={d.cy} r={R} class={pool.has(d.m.id) ? 'dot-pool' : 'dot'} />
-          {pool.has(d.m.id) && <circle cx={d.cx} cy={d.cy} r={R + 3.5} class="ring" />}
+          <g class="pv">
+            <circle cx={d.cx} cy={d.cy} r={R} class={pool.has(d.m.id) ? 'dot-pool' : 'dot'} />
+            {pool.has(d.m.id) && <circle cx={d.cx} cy={d.cy} r={R + 3.5} class="ring" />}
+          </g>
+          {pool.has(d.m.id) && <circle cx={d.cx} cy={d.cy} r={R + 3.5} class="pulse" data-pulse={d.m.id} />}
         </g>
       ))
     }
-    <g>
+    <g class="st" aria-hidden="true">
+      <text x="130" y="444" class="cap b" data-cap="rated"></text>
+      <text x="130" y="462" data-cap="pick"></text>
+    </g>
+    <g class="fx" style="--d: 1.3s">
       {
         vd
           .filter((d) => named.has(d.m.id))

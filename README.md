@@ -6,10 +6,13 @@ requests go to your cheap models, hard ones to your strong ones; you choose
 the judge, your rules pick the model, and every response says why.
 
 Built with **Astro 5** + **Tailwind v4** + **TypeScript**. Static-only output.
-The only runtime JavaScript is the copy button on code blocks. The animated
-diagrams on the home page are inline SVG and CSS (off under
-`prefers-reduced-motion`); the request stepper on the home page and the
-"Resolve a role" panel on `/dispatch` are radio buttons plus CSS `:has()`.
+The runtime JavaScript is the copy button on code blocks and
+`src/scripts/motion.ts` on the home page: scroll reveals and three story loops
+(the hero table's rows rated one by one, the install command retyping itself,
+a request's minimum score sweeping the ladder chart), driven by one
+`requestAnimationFrame` clock that runs only while a story is on screen. All of
+it is off under `prefers-reduced-motion`, where the markup is the final frame.
+The "Resolve a role" panel on `/dispatch` is radio buttons plus CSS `:has()`.
 
 ## What the site shows, and where it comes from
 
