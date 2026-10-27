@@ -3,6 +3,7 @@
 // `doc: true` makes BaseLayout add the `.doc` class to <main> and load
 // /prose.css, which is served from public/ so it ships only on these pages.
 import BaseLayout from './BaseLayout.astro';
+import kit from '../data/kit.json';
 
 interface PageMeta {
   title?: string;
@@ -80,6 +81,13 @@ const isCurrent = (href: string) => href.replace(/\/$/, '') === current.replace(
       </nav>
     </aside>
     <article class="min-w-0">
+      {
+        (merged.path?.startsWith('/docs') || merged.path?.startsWith('/changelog')) && (
+          <p class="text-sm text-[var(--color-ink-soft)] mb-6">
+            Documentation for <a href={kit.releaseUrl}>v{kit.version}</a>
+          </p>
+        )
+      }
       <slot />
     </article>
   </div>

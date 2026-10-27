@@ -151,11 +151,7 @@ const navLink =
             ))
           }
           <li>
-            <a
-              href="https://github.com/reasance/delegation-kit"
-              class={navLink}
-              rel="noopener"
-            >
+            <a href="https://github.com/reasance/delegation-kit" class={navLink} rel="noopener">
               GitHub ↗
             </a>
           </li>
@@ -184,7 +180,8 @@ const navLink =
           · <a href="/changelog/" class="hover:text-[var(--color-ink)]">Changelog</a>
         </span>
         <span class="font-mono">
-          v{kit.version} · scores of {catalog.catalogVersion}
+          <a href={kit.releaseUrl} class={navLink} rel="noopener">v{kit.version}</a>
+          · scores of {catalog.catalogVersion}
         </span>
       </div>
     </footer>

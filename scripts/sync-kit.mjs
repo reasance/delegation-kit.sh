@@ -149,6 +149,8 @@ const changelog = await readFile(resolve(kitRoot, 'CHANGELOG.md'), 'utf8');
 const head = changelog.match(/^## \[([^\]]+)\] — (\d{4}-\d{2}-\d{2})/m);
 if (!head) fail('CHANGELOG.md has no `## [version] — date` heading');
 if (head[1] !== pkg.version) fail(`CHANGELOG head ${head[1]} != package.json ${pkg.version}`);
+const releaseTag = `delegation-kit--v${pkg.version}`;
+const releaseUrl = `${GITHUB}/releases/tag/${releaseTag}`;
 
 // ---- router -------------------------------------------------------------------
 const table = kitCommand('delegation-route', ['table', '--json']);
@@ -188,6 +190,8 @@ await rm(scratch, { recursive: true, force: true });
 
 const kit = {
   version: pkg.version,
+  releaseTag,
+  releaseUrl,
   releaseDate: head[2],
   schemaVersion: table.schema_version,
   reviewPolicy: table.review_policy,
@@ -240,13 +244,16 @@ const routeFor = {
 
 function rewriteLinks(markdown, sourcePath) {
   const sourceDir = posix.dirname(sourcePath);
-  return markdown.replace(
+  const pinned = markdown
+    .replaceAll(`${GITHUB}/blob/main/`, `${GITHUB}/blob/${releaseTag}/`)
+    .replaceAll(`${GITHUB}/tree/main/`, `${GITHUB}/tree/${releaseTag}/`);
+  return pinned.replace(
     /\]\(((?:\.\.?\/)?[A-Za-z0-9_./-]+\.(?:md|json|toml|sh))(#[^)\s]*)?\)/g,
     (match, target, hash = '') => {
       if (/^[a-z]+:/.test(target)) return match;
       const kitPath = posix.normalize(posix.join(sourceDir, target));
       if (routeFor[kitPath]) return `](${routeFor[kitPath]}${hash})`;
-      return `](${GITHUB}/blob/main/${kitPath}${hash})`;
+      return `](${GITHUB}/blob/${releaseTag}/${kitPath}${hash})`;
     }
   );
 }

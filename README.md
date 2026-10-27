@@ -35,6 +35,10 @@ if the catalog moves one of its models to another rung.
 synced blocks between `<!-- BEGIN AUTOGEN -->` / `<!-- END AUTOGEN -->`
 markers. It never dispatches a model.
 
+The generated release link and documentation version come from the kit's
+current tag. Repository links in the synced docs point to that tag, so they
+describe the same release as the site.
+
 ```bash
 npm run sync-kit          # refresh from ../delegation-kit (or DELEGATION_KIT_ROOT)
 npm run sync-kit -- --check   # exit 1 if out of sync; skipped when the kit checkout is absent (CI)
