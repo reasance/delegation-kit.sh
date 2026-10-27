@@ -88,6 +88,15 @@ Rules:
 - Gemini is not in the shipped presets. The `agy` adapter stays installed and
   works with a profile you add by hand.
 
+**GPT-6.1 Terra.** The catalog includes `gpt-6.1-terra`, its current prices
+and its per-effort Artificial Analysis results. To select it, add a personal
+profile with `"adapter": "codex"`, `"model": "gpt-6.1-terra"`, the roles you
+want and `"parameters": {"effort": "low"}`. This adapter accepts Terra at
+`low`, `medium`, `high`, `xhigh` and `max`; `none` and `minimal` are rejected.
+Shipped presets and your personal configuration are not changed by a catalog
+update. Offline tests verify model forwarding and effort validation; they
+do not establish live provider availability or quality.
+
 ## Selection and execution
 
 ```sh

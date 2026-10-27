@@ -21,6 +21,31 @@ below with the numbers observed after running the
 
 ## Verified snapshot
 
+**0.35.1, checked on 2026-10-27** on macOS, from this release candidate.
+
+- **Install and doctor**: installed into isolated Claude, Codex, bin, data
+  and personal-configuration directories. `doctor.sh` returned
+  `50 OK, 1 WARN, 0 FAIL`; `doctor.sh --ping` returned
+  `52 OK, 1 WARN, 0 FAIL`. The warning is the intentionally absent normal
+  Codex `config.toml` in the scratch installation. The installed `luna-clerk`
+  profile returned `PONG`, followed by Claude `sonnet` at effort `low`.
+  Exactly two calls were authorized and observed, once each, with no retry
+  or fallback. These reachability checks do not attest the provider's model
+  identity and did not dispatch Terra through this kit.
+- **Offline**: 14 suites passed in 45 seconds, 11 npm-wrapper tests, ruff,
+  ShellCheck and version consistency.
+- **Catalog**: generated from controller-models, with Terra's official
+  pricing and six Artificial Analysis effort results verified 2026-10-27.
+  Existing shipped presets and personal user configuration stay unchanged.
+  A fresh read-only trial of the upstream refresh still matched
+  `deepseek-flash` to the older 39.5 row instead of 1017 at 45.1,
+  inserted a zero price for Muse Wonder Full and discarded official price
+  sources. As for 0.35.0, the reviewed controller output is retained; the
+  upstream refresh is not written over it. Terra's six results agree with
+  the fresh Artificial Analysis response.
+
+### Earlier releases
+
 **0.35.0, checked on 2026-10-25** on macOS 26.5.1 with Claude Code
 `2.1.310`, Codex CLI `0.164.0`, Kimi Code `2.3.1` and Muse Code `1.4.13`
 (`1.4.13-R6996.1`).
@@ -43,7 +68,7 @@ below with the numbers observed after running the
   `delegation-grok` now reads, `grok-4.7-build`, was observed on 2026-10-25
   in a Grok Build CLI run with `grok-4.7` made through bottega-kit.
 
-### Earlier releases
+### Additional earlier releases
 
 Newest first. "Suites" means the regression suites; every live call was
 authorized and no key was printed.

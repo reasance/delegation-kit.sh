@@ -15,6 +15,13 @@ Every release, newest first.
 
 <!-- BEGIN AUTOGEN -->
 
+## [Unreleased]
+
+## [0.35.1] — 2026-10-27
+
+- Add GPT-6.1 Terra to the catalog with verified prices and per-effort Artificial Analysis results. Shipped profiles stay unchanged; Terra can be selected in a personal Codex profile.
+- Reject unsupported Terra Codex efforts `none` and `minimal` during configuration validation. Verify Terra forwarding with a fake native executable.
+
 ## [0.35.0] — 2026-10-25
 
 Retired models leave the kit, each for its same-line successor. Owner
