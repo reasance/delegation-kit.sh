@@ -17,6 +17,19 @@ Every release, newest first.
 
 ## [Unreleased]
 
+## [0.36.0] — 2026-10-28
+
+### Changed
+
+- Refresh the shipped catalog to Intelligence Index v5.0 with explicit metric version and exact AA slugs. The 8/20-point band rule remains; values are not comparable with v4.
+- Sonnet routine review uses high effort. Add optional Terra/high and Terra/max builder profiles and a read-only Opus/max judgement profile. Preserve the existing Fable identity and personal router choices.
+
+### Fixed
+
+- Installing the reintroduced Terra builder profiles no longer removes them as legacy files; uninstall also covers all new profile names.
+- Missing scores and unmeasured efforts no longer inherit a model's best measured band; legacy or incompatible local catalogs cannot override current v5 evidence.
+- Refresh selects the highest measured score rather than the highest effort, preserves official price provenance, and keeps legacy coding/math results separate from v5.
+
 ## [0.35.1] — 2026-10-27
 
 - Add GPT-6.1 Terra to the catalog with verified prices and per-effort Artificial Analysis results. Shipped profiles stay unchanged; Terra can be selected in a personal Codex profile.

@@ -285,4 +285,15 @@ refresh` writes a local catalog ([the router page](/docs/router)).
   `gpt-5.6-terra` model. To move, rename the profiles, and the pool entries
   and routes that name them, and set `model` to `gpt-6.1-sol`.
 
+## Preset changes in 0.36.0
+
+`sonnet-reviewer` now uses high effort for routine review. `terra-builder` uses
+GPT-6.1 Terra/high; `terra-builder-max` uses max. `opus-judge` provides a read-only
+Opus/max judgement option. Existing Sol/max, Astra/high and Opus/max profiles
+remain. `fable-judge` remains selectable with its original model identity.
+
+These are shipped presets for new configurations. Review and merge changes
+into an existing personal configuration deliberately; installation does not
+replace the user's router pool or authorize any delegation.
+
 <!-- END AUTOGEN -->

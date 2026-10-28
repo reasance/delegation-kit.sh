@@ -21,6 +21,38 @@ below with the numbers observed after running the
 
 ## Verified snapshot
 
+**0.36.0, checked on 2026-10-28** on macOS with Claude Code `2.1.312`,
+Codex CLI `0.165.0`, Python `3.15.2` and gh `2.103.3`, from the release
+candidate.
+
+- **Install and doctor:** source installed into isolated Claude, Codex, bin,
+  data and personal-configuration directories. Static doctor: `49 OK, 1 WARN,
+  0 FAIL`; `doctor.sh --ping`: `51 OK, 1 WARN, 0 FAIL`. The one warning is
+  the intentionally absent normal Codex `config.toml`. The installed
+  `luna-clerk`/max returned `PONG`, then Claude `sonnet`/low returned `PONG`.
+  Exactly two separately authorized calls were consumed, with no retry or
+  fallback. Claude's call disabled tools, hooks and MCP through the release
+  wrapper. These are reachability checks, not provider identity attestation
+  or qualification of the new builder/reviewer choices.
+- **Offline:** 14 suites, 11 npm-wrapper tests, ruff, ShellCheck and version
+  consistency passed. Router regressions cover suite-mismatched overlays,
+  null scores, unmeasured effort, exact slugs and nonmonotonic effort scores.
+- **Catalog:** the reviewed controller snapshot uses Intelligence Index v5.0
+  and unchanged official token prices. A read-only native refresh over the
+  same 715 API rows agreed with every controller index, preserved official
+  price/source facts, selected DeepSeek 1017 at 32.5, and kept Muse Wonder
+  Full's unknown price unset. The controller-generated catalog is retained
+  so its version/source provenance and consumer sync stay reproducible.
+- **Installation regression:** the first isolated install revealed that legacy
+  cleanup removed the newly reintroduced `terra-builder` files. Cleanup now
+  skips shipped names, and regression coverage checks the new Terra files,
+  their model/effort, and the read-only Opus judge. The corrected installation
+  was verified before either live call. Existing edited user profiles retain
+  the installer's preservation behavior.
+
+### Earlier releases
+
+
 **0.35.1, checked on 2026-10-27** on macOS, from this release candidate.
 
 - **Install and doctor**: installed into isolated Claude, Codex, bin, data
@@ -44,7 +76,7 @@ below with the numbers observed after running the
   upstream refresh is not written over it. Terra's six results agree with
   the fresh Artificial Analysis response.
 
-### Earlier releases
+### Additional earlier releases
 
 **0.35.0, checked on 2026-10-25** on macOS 26.5.1 with Claude Code
 `2.1.310`, Codex CLI `0.164.0`, Kimi Code `2.3.1` and Muse Code `1.4.13`
