@@ -195,6 +195,34 @@
           ],
           "selection": "explicit-only",
           "review_policy": "optional"
+        },
+        {
+          "profile": "terra-builder",
+          "model": "gpt-6.1-terra",
+          "family": "openai",
+          "adapter": "codex",
+          "lane": "builder",
+          "configuration_valid": true,
+          "technical_compatibility": true,
+          "capabilities": [
+            "native-profile"
+          ],
+          "selection": "explicit-only",
+          "review_policy": "optional"
+        },
+        {
+          "profile": "terra-builder-max",
+          "model": "gpt-6.1-terra",
+          "family": "openai",
+          "adapter": "codex",
+          "lane": "builder",
+          "configuration_valid": true,
+          "technical_compatibility": true,
+          "capabilities": [
+            "native-profile"
+          ],
+          "selection": "explicit-only",
+          "review_policy": "optional"
         }
       ],
       "selected": null,
@@ -580,6 +608,20 @@
           "capabilities": [
             "read-only",
             "text-patch"
+          ],
+          "selection": "explicit-only",
+          "review_policy": "optional"
+        },
+        {
+          "profile": "opus-judge",
+          "model": "claude-opus-5-5",
+          "family": "anthropic",
+          "adapter": "claude-code",
+          "lane": "judgement",
+          "configuration_valid": true,
+          "technical_compatibility": true,
+          "capabilities": [
+            "native-profile"
           ],
           "selection": "explicit-only",
           "review_policy": "optional"

@@ -8,10 +8,12 @@
 // line at each request's minimum score, the models under it dimmed, and the
 // cheapest ringed model at or above it pulsing (scripts/motion.ts).
 import catalog from '../data/catalog.json';
-import { cuts, luna, flash, opus, tiering, examples, cost } from '../lib/example-pool';
+import { cuts, terra, flash, opus, tiering, examples, cost, indexVersion } from '../lib/example-pool';
 
 type M = { id: string; tier: string | null; index: number | null };
+const selected = new Map([terra, flash, opus].map((p) => [p.model, p]));
 const dots = (catalog.models as M[])
+  .map((m) => selected.has(m.id) ? { ...m, index: selected.get(m.id)!.index, tier: selected.get(m.id)!.tier } : m)
   .filter((m): m is M & { index: number } => typeof m.index === 'number')
   .sort((a, b) => b.index - a.index);
 // The frontier example is also the best model of the day: one label for both.
@@ -19,9 +21,9 @@ const best = dots[0];
 if (best.id !== opus.model || best.index !== cuts.top)
   throw new Error('LadderChart: the copy says the frontier example, Opus 5.5, is the best of the day');
 
-// The copy says Luna clears the mid line; fail the build if a refresh moves it.
-if (luna.index < cuts.mid) throw new Error('LadderChart: the copy says Luna clears the mid line');
-const over = (luna.index - cuts.mid).toFixed(1);
+// The copy says Terra clears the mid line; fail the build if a refresh moves it.
+if (terra.index < cuts.mid) throw new Error('LadderChart: the copy says Terra clears the mid line');
+const over = (terra.index - cuts.mid).toFixed(1);
 const unscored = (catalog.models as M[]).filter((m) => typeof m.index !== 'number').map((m) => m.id);
 const R = 5.5;
 
@@ -46,7 +48,7 @@ const Yv = (i: number) => 490 - i * 7.6;
 const vd = swarm(Yv).map((d) => ({ ...d, cx: 70 + d.level * 12, cy: d.p }));
 
 // The three example models are ringed and named.
-const pool = new Set([luna.model, flash.model, opus.model]);
+const pool = new Set([terra.model, flash.model, opus.model]);
 const named = pool;
 const at = (list: typeof hd, id: string) => list.find((d) => d.m.id === id)!;
 
@@ -60,7 +62,7 @@ const beats = examples.slice(0, 3).map((x) => ({
   rated: ['Rated ' + x.v.difficulty + ' of 4', ...x.v.tags].join(' · '),
   min: x.r.minimum ?? 0
 }));
-const storyPool = [luna, flash, opus]
+const storyPool = [terra, flash, opus]
   .map((p) => ({ id: p.model, name: p.name, index: p.index, cost: cost(p) }))
   .sort((a, b) => a.cost - b.cost);
 const story = JSON.stringify({ beats, pool: storyPool });
@@ -101,7 +103,7 @@ const css = `
 .lc-d{display:none}
 @media (min-width:1024px){.lc-d{display:block}.lc-m{display:none}}
 `;
-const desc = `Artificial Analysis Intelligence Index scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) and ${luna.name} (${luna.index}) are mid, Luna ${over} above the mid line.`;
+const desc = `Artificial Analysis Intelligence Index v${indexVersion} scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model, using the example effort for ringed models and the best measured setting for other models. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) is small; ${terra.name} (${terra.index}) is mid, ${over} above the mid line.`;
 const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} · ${d.m.tier}`;
 ---
 
@@ -177,9 +179,9 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
       <path d={`M${at(hd, flash.model).cx} ${at(hd, flash.model).cy - 10} V80`} class="leader"></path>
       <text x={at(hd, flash.model).cx - 6} y="58" class="b">{flash.name}</text>
       <text x={at(hd, flash.model).cx - 6} y="74" class="sm">{flash.index.toFixed(1)}</text>
-      <path d={`M${at(hd, luna.model).cx} ${at(hd, luna.model).cy - 7} V96`} class="leader"></path>
-      <text x={at(hd, luna.model).cx - 7} y="104" class="end b halo">{luna.name}</text>
-      <text x={at(hd, luna.model).cx - 7} y="118" class="end sm soft halo">{luna.index.toFixed(1)}, {over} above mid</text>
+      <path d={`M${at(hd, terra.model).cx} ${at(hd, terra.model).cy - 7} V96`} class="leader"></path>
+      <text x={at(hd, terra.model).cx - 7} y="104" class="end b halo">{terra.name}</text>
+      <text x={at(hd, terra.model).cx - 7} y="118" class="end sm soft halo">{terra.index.toFixed(1)}, {over} above mid</text>
     </g>
   </svg>
 
@@ -239,7 +241,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
         vd
           .filter((d) => named.has(d.m.id))
           .map((d) =>
-            d.m.id === luna.model ? (
+            d.m.id === terra.model ? (
               <path d={`M${d.cx + 7} ${d.cy} H112 V${d.cy + 14} H124`} class="leader" />
             ) : (
               <path d={`M${d.cx + 9} ${d.cy} H124`} class="leader" />
@@ -249,8 +251,8 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
       <text x="130" y={at(vd, opus.model).cy + 4} class="b">{opus.name} {opus.index.toFixed(1)}</text>
       <text x="130" y={at(vd, opus.model).cy + 18} class="sm soft">best of the day</text>
       <text x="130" y={at(vd, flash.model).cy + 4} class="b">{flash.name} {flash.index.toFixed(1)}</text>
-      <text x="130" y={at(vd, luna.model).cy + 18} class="b">{luna.name} {luna.index.toFixed(1)}</text>
-      <text x="130" y={at(vd, luna.model).cy + 32} class="sm soft">mid: {over} above the line</text>
+      <text x="130" y={at(vd, terra.model).cy + 18} class="b">{terra.name} {terra.index.toFixed(1)}</text>
+      <text x="130" y={at(vd, terra.model).cy + 32} class="sm soft">mid: {over} above the line</text>
     </g>
   </svg>
   <p class="sr-only">{n} models plotted{unscored.length ? `; ${unscored.join(', ')} ${unscored.length === 1 ? 'has' : 'have'} no score yet` : ''}.</p>

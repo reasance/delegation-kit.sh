@@ -124,7 +124,7 @@ Meta's Muse models ship two ways, and you choose by profile:
 ## Checking a text patch
 
 `delegation-patch-verify` enforces the versioned policy in
-[`config/external-patch-policy.json`](https://github.com/reasance/delegation-kit/blob/delegation-kit--v0.35.1/config/external-patch-policy.json).
+[`config/external-patch-policy.json`](https://github.com/reasance/delegation-kit/blob/delegation-kit--v0.36.0/config/external-patch-policy.json).
 It never applies a patch: it parses it, checks it against the policy, fixes
 the strip level from the header shape, runs `git apply --check` at that one
 level, and prints a receipt with no patch content.

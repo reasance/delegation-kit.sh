@@ -225,6 +225,8 @@ const ladder = {
       tier: row.tier ?? null,
       index: row.evidence?.index ?? null,
       variant: row.evidence?.variant ?? null,
+      variants: row.evidence?.variants ?? {},
+      indexVersion: row.evidence?.index_version ?? null,
       source: row.evidence ? `${row.evidence.source}:${row.evidence.date}` : 'hand',
       price: row.price ?? null
     }))

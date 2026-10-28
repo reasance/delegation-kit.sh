@@ -3,9 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import ExampleTable from '../components/ExampleTable.astro';
 import LadderChart from '../components/LadderChart.astro';
-import { luna, flash, opus, pool, fallback, catalogVersion, cuts } from '../lib/example-pool';
+import { terra, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
 
-const models = `${luna.name} (${luna.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
+const models = `${terra.name} (${terra.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
 
 const config = `"router": {
   "decider": { "kind": "llm", "profile": "${flash.id}" },
@@ -64,7 +64,7 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
         count={3}
         rotate
         story
-        caption={`The answer column cycles through four sets of models from different vendors; in each, the cheapest model that reaches the request's minimum answers. The setup below uses the first: ${models}.`}
+        caption={`The answer column cycles through four example pools with explicitly measured efforts; in each, the cheapest model that reaches the request's minimum answers. The setup below uses the first: ${models}.`}
       />
     </div>
   </section>
@@ -102,7 +102,7 @@ delegation-config show  # your models`}
           <h3 class={stepTitle}>Choose your models and the decider</h3>
           <p class="text-[var(--color-ink-soft)]">
             Name the models the router may pick from, the decider that rates each request, and the model
-            that answers when the decider can't. Here: {luna.name}, {flash.name} and {opus.name}.
+            that answers when the decider can't. Here: {terra.name}, {flash.name} and {opus.name}.
           </p>
         </div>
         <CodeBlock lang="json" label="~/.config/delegation-kit/config.json, next to “profiles”" code={config} />
@@ -138,10 +138,10 @@ delegation-config show  # your models`}
       <li class={pickRow} data-reveal>
         <div>
           <span class={stepNum} aria-hidden="true">1</span>
-          <h3 class={stepTitle}>Every model gets a score</h3>
+          <h3 class={stepTitle}>Measured efforts get a score</h3>
         </div>
         <p class="text-[var(--color-ink-soft)] max-w-2xl">
-          Artificial Analysis, an independent lab, gives every model the same tests and a score. Within 8
+          Artificial Analysis publishes a versioned set of model tests. Unmeasured efforts stay unknown. Within 8
           points of the day's best: frontier. Within 20: mid. The rest: small.
         </p>
       </li>
@@ -169,10 +169,11 @@ delegation-config show  # your models`}
     </ol>
 
     <div class="mt-16">
-      <p class="eyebrow mb-4" data-reveal>Scores on {catalogVersion}</p>
+      <p class="eyebrow mb-4" data-reveal>Intelligence Index v{indexVersion} · {catalogVersion}</p>
       <LadderChart />
       <p class="mt-4 max-w-2xl text-[var(--color-ink-soft)]">
-        Ringed: the three models in the examples. The amber line is a request's minimum score: the
+        Ringed dots use the efforts in this example; other dots use each model's best measured setting.
+        Unmeasured results stay off the chart. The amber line is a request's minimum score: the
         cheapest ringed model at or above it answers. Refresh the scores with your own Artificial
         Analysis key, or set any model's tier yourself.
       </p>

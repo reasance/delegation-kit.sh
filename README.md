@@ -27,9 +27,11 @@ written by hand here:
 | `/docs/router`, `/docs/configuration`, `/docs/executors`, `/docs/compatibility` | `docs/router.md`, `docs/user-configuration.md`, `docs/external-executors.md`, `docs/compatibility.md` |
 | `/changelog`                                                                    | `CHANGELOG.md`                                                                                        |
 
-The worked example (a pool of GLM 5.3 Flash and Opus 5.5) is computed at build
-time by `src/lib/example-pool.ts`, which mirrors tiered-v1 and fails the build
-if the catalog moves one of its models to another rung.
+The worked example uses Terra/high (mid), DeepSeek/max (small, default and
+API decider) and Opus/max (frontier). It is computed at build time by
+`src/lib/example-pool.ts`, which mirrors floor-v1 and verifies every displayed
+answer against effort-specific v5 evidence. The ladder uses those exact efforts
+for the three ringed models and the best measured setting for other models.
 
 `scripts/sync-kit.mjs` runs the kit's read-only commands and rewrites the
 synced blocks between `<!-- BEGIN AUTOGEN -->` / `<!-- END AUTOGEN -->`
