@@ -1,6 +1,6 @@
 // The worked example uses three shipped profiles with exact measured efforts:
-// Terra/high (mid), DeepSeek/max (small, default and decider), Opus/max
-// (frontier). Scores and token prices come from the released v5 catalog.
+// Hydrogen/high (mid), DeepSeek/max (small, default and decider), Opus/max
+// (frontier). Scores and token prices come from the released v5.0.1 catalog.
 // route() mirrors floor-v1 for these bounded text-only illustrative requests.
 import catalog from '../data/catalog.json';
 
@@ -60,7 +60,7 @@ export type Profile = {
 function profile(id: string, model: string, name: string, via: string, expected: Tier, effort: string): Profile {
   const m = (catalog.models as CatalogModel[]).find((row) => row.id === model);
   const index = m?.variants?.[effort];
-  if (!m || !m.price || typeof index !== 'number' || m.indexVersion !== '5.0')
+  if (!m || !m.price || typeof index !== 'number' || m.indexVersion !== indexVersion)
     throw new Error(`example pool: ${model}/${effort} has no measured v5 score`);
   const tier: Tier = index >= cuts.frontier ? 'frontier' : index >= cuts.mid ? 'mid' : 'small';
   if (tier !== expected) throw new Error(`example pool: ${model}/${effort} is ${tier}, expected ${expected}`);
@@ -68,11 +68,11 @@ function profile(id: string, model: string, name: string, via: string, expected:
 
 }
 
-export const terra = profile('terra-builder', 'gpt-6.1-terra', 'GPT-6.1 Terra', 'through Codex at high effort', 'mid', 'high');
+export const hydrogen = profile('hydrogen-builder', 'gemini-4-hydrogen', 'Gemini 4 Hydrogen', 'through Antigravity at high effort', 'mid', 'high');
 export const flash = profile('deepseek-flash', 'deepseek-flash', 'DeepSeek Flash', 'an API key at max effort', 'small', 'max');
 export const opus = profile('opus-reviewer', 'claude-opus-5-5', 'Claude Opus 5.5', 'through Claude Code at max effort', 'frontier', 'max');
 /** The pool in the order the config lists it; flash is the default and the decider. */
-export const pool = [terra, flash, opus];
+export const pool = [hydrogen, flash, opus];
 export const fallback = flash;
 
 export const cost = (p: Profile) => (p.price.in * REQUEST_TOKENS + p.price.out * ANSWER_TOKENS) / 1e6;
@@ -143,8 +143,8 @@ export const examples: Example[] = [
   example(
     'Summarise this contract',
     { difficulty: 2, tags: [], confidence: 0.8 },
-    terra,
-    `Minimum ${cuts.mid}: Terra (${terra.index}) clears it and is the cheapest that does.`
+    hydrogen,
+    `Minimum ${cuts.mid}: Hydrogen (${hydrogen.index}) clears it and is the cheapest that does.`
   ),
   example(
     'Find the race condition in this scheduler',
@@ -161,8 +161,8 @@ export const examples: Example[] = [
   example(
     'What is 17% of 2,340?',
     { difficulty: 1, tags: ['math'], confidence: 0.8 },
-    terra,
-    `Easy, but math raises the minimum to ${cuts.mid}: Terra (${terra.index}) still clears it.`
+    hydrogen,
+    `Easy, but math raises the minimum to ${cuts.mid}: Hydrogen (${hydrogen.index}) still clears it.`
   ),
   example(
     'Any request, when the decider times out',
@@ -208,8 +208,8 @@ function catalogProfile(model: string): Profile {
  * Models outside the primary pool use their best explicitly measured variant.
  */
 const SETS: { models: string[]; answers: [string, string, string] }[] = [
-  { models: ['gpt-6.1-terra', 'deepseek-flash', 'claude-opus-5-5'],
-    answers: ['deepseek-flash', 'gpt-6.1-terra', 'claude-opus-5-5'] },
+  { models: ['gemini-4-hydrogen', 'deepseek-flash', 'claude-opus-5-5'],
+    answers: ['deepseek-flash', 'gemini-4-hydrogen', 'claude-opus-5-5'] },
   { models: ['gpt-6-luna', 'gpt-6.1-terra', 'claude-sonnet-5-5'],
     answers: ['gpt-6-luna', 'gpt-6.1-terra', 'claude-sonnet-5-5'] },
   { models: ['deepseek-flash', 'gpt-6.1-terra', 'gpt-6.1-sol'],
@@ -222,7 +222,7 @@ export type Option = { name: string; cost: string; tier: Tier };
 
 /** For each of the hero's rows, the model that answers in each set. */
 export const heroOptions: Option[][] = (() => {
-  const own = new Map([terra, flash, opus].map((p) => [p.model, p]));
+  const own = new Map([hydrogen, flash, opus].map((p) => [p.model, p]));
   const sets = SETS.map(({ models, answers }, k) => {
     const pool = models.map((id) => own.get(id) ?? catalogProfile(id));
     return answers.map((id, i) => {

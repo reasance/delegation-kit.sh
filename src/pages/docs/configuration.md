@@ -85,8 +85,9 @@ Rules:
   text request with optional Bearer auth. It never calls `/models`, never
   uses tools and never retries. A declared `effort` goes out as
   `reasoning_effort`; without one the field is not sent.
-- Gemini is not in the shipped presets. The `agy` adapter stays installed and
-  works with a profile you add by hand.
+- Optional shipped `hydrogen-*` and `carbon-judge` profiles use `agy`.
+  Hydrogen supports low/medium/high/xhigh. Carbon supports low/medium/high
+  and requires its exact account-enabled CLI ID; no API fallback is selected.
 
 **GPT-6.1 Terra.** The catalog includes `gpt-6.1-terra`, its current prices
 and its per-effort Artificial Analysis results. To select it, add a personal
@@ -290,10 +291,22 @@ refresh` writes a local catalog ([the router page](/docs/router)).
 `sonnet-reviewer` now uses high effort for routine review. `terra-builder` uses
 GPT-6.1 Terra/high; `terra-builder-max` uses max. `opus-judge` provides a read-only
 Opus/max judgement option. Existing Sol/max, Astra/high and Opus/max profiles
-remain. `fable-judge` remains selectable with its original model identity.
+remain. New configurations use Fable 5.2/high for `fable-judge` and
+`fable-policy-annotator`, with `fable-judge-max` as an explicit maximum-effort
+option. Existing personal Fable 5.1 selections remain unchanged.
 
 These are shipped presets for new configurations. Review and merge changes
 into an existing personal configuration deliberately; installation does not
 replace the user's router pool or authorize any delegation.
+
+## Google CLI profiles
+
+New configurations include `hydrogen-scout` (medium), `hydrogen-builder`
+(high), `hydrogen-builder-xhigh`, and `carbon-judge` (high), all using agy.
+Builder output stays a textual patch for the lead to verify and apply.
+Carbon requires an enabled Ultra/Enterprise account and its exact CLI model
+ID in the isolated account inventory. A missing model fails before dispatch.
+Adding a shipped profile neither edits an existing router pool nor grants
+permission to delegate. Select profiles explicitly for each authorized task.
 
 <!-- END AUTOGEN -->

@@ -3,9 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import ExampleTable from '../components/ExampleTable.astro';
 import LadderChart from '../components/LadderChart.astro';
-import { terra, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
+import { hydrogen, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
 
-const models = `${terra.name} (${terra.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
+const models = `${hydrogen.name} (${hydrogen.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
 
 const config = `"router": {
   "decider": { "kind": "llm", "profile": "${flash.id}" },
@@ -102,7 +102,7 @@ delegation-config show  # your models`}
           <h3 class={stepTitle}>Choose your models and the decider</h3>
           <p class="text-[var(--color-ink-soft)]">
             Name the models the router may pick from, the decider that rates each request, and the model
-            that answers when the decider can't. Here: {terra.name}, {flash.name} and {opus.name}.
+            that answers when the decider can't. Here: {hydrogen.name}, {flash.name} and {opus.name}.
           </p>
         </div>
         <CodeBlock lang="json" label="~/.config/delegation-kit/config.json, next to “profiles”" code={config} />
@@ -128,6 +128,35 @@ delegation-config show  # your models`}
     </ol>
     <p class="mt-10" data-reveal>
       <a href="/docs/" class={btn}>Get started, step by step →</a>
+    </p>
+  </section>
+
+  <section
+    id="model-preview"
+    aria-labelledby="model-preview-title"
+    class="max-w-6xl mx-auto px-6 py-12"
+  >
+    <p class="eyebrow mb-4">Released v0.37.0 · AA v5.0.1 · November 15, 2026</p>
+    <h2 id="model-preview-title" class="text-3xl md:text-4xl mb-6">
+      New models, with explicit roles.
+    </h2>
+    <p class="max-w-2xl mb-5">
+      Fable 5.2/high scores 61.8 and max 64.6. Carbon/high scores 60.0; Hydrogen/high 50.8 and xhigh
+      53.9. Each score belongs to that effort. Frontier starts at 56.6 and mid at 44.6.
+    </p>
+    <p class="max-w-2xl mb-5">
+      Hydrogen/medium is a scout, high a builder or reviewer, and xhigh a deeper builder option.
+      Carbon/high is an optional judge; Fable 5.2 judgement profiles remain available. Your personal
+      router pool, default and decider stay under your control.
+    </p>
+    <p class="max-w-2xl mb-5">
+      Carbon stays optional through Antigravity/agy, requires an enabled Ultra or Enterprise
+      account, and must appear under its exact requested ID. It was absent from the checked local
+      inventory; Hydrogen was present. No model or API substitution.
+    </p>
+    <p>
+      <a href="/docs/models/" class="underline">Benchmarks and provider limits →</a>
+      · <a href="/docs/configuration/" class="underline">Role configuration →</a>
     </p>
   </section>
 

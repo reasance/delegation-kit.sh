@@ -17,6 +17,15 @@ Every release, newest first.
 
 ## [Unreleased]
 
+## [0.37.0] — 2026-11-15
+
+- Add agy Hydrogen scout/medium and builder/high/xhigh profiles plus an optional Carbon/high judge. Extend the adapter to low/medium/high/xhigh with per-model validation and exact inventory checks; preserve prompt-only isolation and personal router choices.
+
+- Move shipped Fable judgement and annotation profiles to Fable 5.2/high; add an explicit fable-judge-max option. Preserve personal profile models, efforts and router pools.
+- Update AA to v5.0.1, use the paginated Free API, and reject incompatible or incomplete pagination. Band floors become 56.6/44.6. Carbon has officially documented CLI IDs and is gated per account, without API fallback.
+
+- Expose serving availability in catalog output and keep restricted-preview token prices unknown during benchmark refresh. Accept both exact empty-plugin inventory messages used by agy, while still refusing imported plugins.
+
 ## [0.36.0] — 2026-10-28
 
 ### Changed

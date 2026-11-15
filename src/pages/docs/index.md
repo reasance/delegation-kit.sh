@@ -17,9 +17,9 @@ which answered and why.
 - macOS with Node.js, `jq`, `git` and `python3`.
 - Two or more models you can call. Each is either an API key (DeepSeek, Qwen,
   MiniMax, Meta, or any OpenAI-compatible endpoint, local ones included) or a
-  plan you use through a CLI (Claude, Codex, GLM, Kimi, Muse Code, Grok).
-- The example uses three models the install already knows: GPT-5.6 Luna
-  (a Codex login), DeepSeek Flash (an API key) and Claude Opus 5.5 (Claude
+  plan you use through a CLI (Claude, Codex, GLM, Kimi, Muse Code, Grok, Antigravity).
+- The example uses three models the install already knows: Gemini 4 Hydrogen/high
+  (an Antigravity login), DeepSeek Flash (an API key) and Claude Opus 5.5 (Claude
   Code). Use the ones you have instead.
 
 ## 1. Install
@@ -63,15 +63,16 @@ Open `~/.config/delegation-kit/config.json` and add a `"router"` entry next to
 ```json
 "router": {
   "decider": { "kind": "llm", "profile": "deepseek-flash" },
-  "pool": ["luna-clerk", "deepseek-flash", "opus-reviewer"],
+  "pool": ["hydrogen-builder", "deepseek-flash", "opus-reviewer"],
   "default": "deepseek-flash"
 }
 ```
 
 - `decider`: who rates each request. Here, DeepSeek Flash on your API key.
 - `pool`: the profiles it may choose from, by the names `show` printed.
-  `luna-clerk` is [small](/#how), `deepseek-flash` mid, `opus-reviewer`
-  frontier, the strongest tier.
+  `hydrogen-builder` is mid at high effort (50.8), `deepseek-flash` small at
+  max effort (32.6), and `opus-reviewer` frontier at max effort (59.1). The
+  v5.0.1 snapshot starts mid at 44.6 and frontier at 56.6.
 - `default`: the profile that answers when the decider can't.
 
 Other deciders: Levanto Sage, TypeSafe Jev, your own Dipylon, a local

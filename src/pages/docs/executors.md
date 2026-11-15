@@ -43,7 +43,7 @@ are read from is in [keys and environment](/docs/configuration#keys-and-environm
 | `token-plan-openai` | text roles: `text-patch` | minimal … max (xhigh) |
 | `deepseek-api` | text roles: `text-patch` | minimal … max (max) |
 | `openai-compatible` | text roles: `text-patch` | minimal … max, sent only when declared (none) |
-| `agy` | scout, builder, frontend-builder, reviewer, judgement: `read-only` | medium, high |
+| `agy` | scout, builder, frontend-builder, reviewer, judgement: `read-only` | low, medium, high; xhigh only for Hydrogen |
 | `codex` | text roles plus routine-review, material-review, security: `read-only` | none … max (high) |
 | `claude-code` | text roles plus routine-review, material-review, security: `read-only` | low … max (high) |
 
@@ -124,7 +124,7 @@ Meta's Muse models ship two ways, and you choose by profile:
 ## Checking a text patch
 
 `delegation-patch-verify` enforces the versioned policy in
-[`config/external-patch-policy.json`](https://github.com/reasance/delegation-kit/blob/delegation-kit--v0.36.0/config/external-patch-policy.json).
+[`config/external-patch-policy.json`](https://github.com/reasance/delegation-kit/blob/delegation-kit--v0.37.0/config/external-patch-policy.json).
 It never applies a patch: it parses it, checks it against the policy, fixes
 the strip level from the header shape, runs `git apply --check` at that one
 level, and prints a receipt with no patch content.
@@ -221,5 +221,14 @@ A run that hits the deadline publishes nothing. macOS ships neither
 guards are not task limits: a 20 s connect timeout on the HTTP adapters,
 and the short probes `check` runs against a CLI. On Grok, `check --json`
 reports `timeout_seconds` (the configured value or `null`).
+
+## Google profile availability
+
+Optional Hydrogen scout/builder profiles and a Carbon/high judge are shipped
+through `agy`. The runner validates effort per model and checks the exact
+requested CLI ID before dispatch. Carbon requires an enabled Ultra/Enterprise
+account. Missing access refuses the request without another model or an API
+substitution. The standalone adapter default remains Flash; shipped profiles
+name their own model and effort explicitly.
 
 <!-- END AUTOGEN -->
