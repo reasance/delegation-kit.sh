@@ -1,12 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import kit from '../data/kit.json';
 import CodeBlock from '../components/CodeBlock.astro';
 import ExampleTable from '../components/ExampleTable.astro';
 import LadderChart from '../components/LadderChart.astro';
-import { terra, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
+import { hydrogen, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
 
-const models = `${terra.name} (${terra.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
+const models = `${hydrogen.name} (${hydrogen.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
 
 const config = `"router": {
   "decider": { "kind": "llm", "profile": "${flash.id}" },
@@ -103,7 +102,7 @@ delegation-config show  # your models`}
           <h3 class={stepTitle}>Choose your models and the decider</h3>
           <p class="text-[var(--color-ink-soft)]">
             Name the models the router may pick from, the decider that rates each request, and the model
-            that answers when the decider can't. Here: {terra.name}, {flash.name} and {opus.name}.
+            that answers when the decider can't. Here: {hydrogen.name}, {flash.name} and {opus.name}.
           </p>
         </div>
         <CodeBlock lang="json" label="~/.config/delegation-kit/config.json, next to “profiles”" code={config} />
@@ -137,7 +136,7 @@ delegation-config show  # your models`}
     aria-labelledby="model-preview-title"
     class="max-w-6xl mx-auto px-6 py-12"
   >
-    <p class="eyebrow mb-4">Next release · unreleased · AA v5.0.1 · November 13, 2026</p>
+    <p class="eyebrow mb-4">Released v0.37.0 · AA v5.0.1 · November 15, 2026</p>
     <h2 id="model-preview-title" class="text-3xl md:text-4xl mb-6">
       New models, with explicit roles.
     </h2>
@@ -156,16 +155,14 @@ delegation-config show  # your models`}
       inventory; Hydrogen was present. No model or API substitution.
     </p>
     <p>
-      <a href="/next/models/" class="underline">Benchmarks and provider limits →</a>
-      · <a href="/next/configuration/" class="underline">Role configuration →</a>
+      <a href="/docs/models/" class="underline">Benchmarks and provider limits →</a>
+      · <a href="/docs/configuration/" class="underline">Role configuration →</a>
     </p>
   </section>
 
   <!-- How it picks a model -->
   <section id="how" class="rule pt-16 pb-20 scroll-mt-20">
     <h2 class="text-3xl md:text-4xl mb-10" data-reveal>How it picks a model</h2>
-    <p class="mb-8 max-w-2xl text-sm">This worked example uses the published v{kit.version} catalog from {catalogVersion}.
-      The unreleased <a href="/next/models/" class="underline">v5.0.1 snapshot</a> has new scores and bands.</p>
     <ol role="list" class="grid gap-8">
       <li class={pickRow} data-reveal>
         <div>
@@ -201,7 +198,7 @@ delegation-config show  # your models`}
     </ol>
 
     <div class="mt-16">
-      <p class="eyebrow mb-4" data-reveal>Published example · Intelligence Index v{indexVersion} · {catalogVersion}</p>
+      <p class="eyebrow mb-4" data-reveal>Intelligence Index v{indexVersion} · {catalogVersion}</p>
       <LadderChart />
       <p class="mt-4 max-w-2xl text-[var(--color-ink-soft)]">
         Ringed dots use the efforts in this example; other dots use each model's best measured setting.

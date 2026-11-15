@@ -8,22 +8,23 @@
 // line at each request's minimum score, the models under it dimmed, and the
 // cheapest ringed model at or above it pulsing (scripts/motion.ts).
 import catalog from '../data/catalog.json';
-import { cuts, terra, flash, opus, tiering, examples, cost, indexVersion } from '../lib/example-pool';
+import { cuts, hydrogen, flash, opus, tiering, examples, cost, indexVersion } from '../lib/example-pool';
 
-type M = { id: string; tier: string | null; index: number | null };
-const selected = new Map([terra, flash, opus].map((p) => [p.model, p]));
+type M = { name?: string | null; id: string; tier: string | null; index: number | null };
+const selected = new Map([hydrogen, flash, opus].map((p) => [p.model, p]));
 const dots = (catalog.models as M[])
   .map((m) => selected.has(m.id) ? { ...m, index: selected.get(m.id)!.index, tier: selected.get(m.id)!.tier } : m)
   .filter((m): m is M & { index: number } => typeof m.index === 'number')
   .sort((a, b) => b.index - a.index);
-// The frontier example is also the best model of the day: one label for both.
+// The overall leader is independent of the three illustrative pool models.
 const best = dots[0];
-if (best.id !== opus.model || best.index !== cuts.top)
-  throw new Error('LadderChart: the copy says the frontier example, Opus 5.5, is the best of the day');
+if (!best || best.index !== cuts.top) throw new Error('LadderChart: catalog leader disagrees with tiering');
+const bestName = best.name ?? best.id;
+const domain = Math.ceil(cuts.top / 10) * 10;
 
-// The copy says Terra clears the mid line; fail the build if a refresh moves it.
-if (terra.index < cuts.mid) throw new Error('LadderChart: the copy says Terra clears the mid line');
-const over = (terra.index - cuts.mid).toFixed(1);
+// The copy says Hydrogen clears the mid line; fail the build if a refresh moves it.
+if (hydrogen.index < cuts.mid) throw new Error('LadderChart: the copy says Hydrogen clears the mid line');
+const over = (hydrogen.index - cuts.mid).toFixed(1);
 const unscored = (catalog.models as M[]).filter((m) => typeof m.index !== 'number').map((m) => m.id);
 const R = 5.5;
 
@@ -40,21 +41,21 @@ function swarm(pos: (i: number) => number) {
 }
 
 // desktop: index on x
-const X = (i: number) => 40 + (i / 60) * 880;
+const X = (i: number) => 40 + (i / domain) * 880;
 const AX = 170;
 const hd = swarm(X).map((d) => ({ ...d, cx: d.p, cy: AX - 12 - d.level * 12 }));
 // vertical: index on y
-const Yv = (i: number) => 490 - i * 7.6;
+const Yv = (i: number) => 490 - i * (456 / domain);
 const vd = swarm(Yv).map((d) => ({ ...d, cx: 70 + d.level * 12, cy: d.p }));
 
 // The three example models are ringed and named.
-const pool = new Set([terra.model, flash.model, opus.model]);
+const pool = new Set([hydrogen.model, flash.model, opus.model]);
 const named = pool;
 const at = (list: typeof hd, id: string) => list.find((d) => d.m.id === id)!;
 
 const f = cuts.frontier;
 const md = cuts.mid;
-const ticks = [0, 10, 20, 30, 40, 50, 60];
+const ticks = Array.from({ length: domain / 10 + 1 }, (_, i) => i * 10);
 const n = dots.length;
 
 // The story's data: the hero's three requests, and the ringed models by price.
@@ -62,7 +63,7 @@ const beats = examples.slice(0, 3).map((x) => ({
   rated: ['Rated ' + x.v.difficulty + ' of 4', ...x.v.tags].join(' · '),
   min: x.r.minimum ?? 0
 }));
-const storyPool = [terra, flash, opus]
+const storyPool = [hydrogen, flash, opus]
   .map((p) => ({ id: p.model, name: p.name, index: p.index, cost: cost(p) }))
   .sort((a, b) => a.cost - b.cost);
 const story = JSON.stringify({ beats, pool: storyPool });
@@ -103,7 +104,7 @@ const css = `
 .lc-d{display:none}
 @media (min-width:1024px){.lc-d{display:block}.lc-m{display:none}}
 `;
-const desc = `Published release example, using the historical catalog snapshot. Artificial Analysis Intelligence Index v${indexVersion} scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model, using the example effort for ringed models and the best measured setting for other models. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) is small; ${terra.name} (${terra.index}) is mid, ${over} above the mid line.`;
+const desc = `Artificial Analysis Intelligence Index v${indexVersion} scores from 0 to ${domain} on ${catalog.catalogVersion}, one dot per model, using the example effort for ringed models and the best measured setting for other models. The best score of the snapshot is ${bestName} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) is small; ${hydrogen.name} (${hydrogen.index}) is mid, ${over} above the mid line.`;
 const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} · ${d.m.tier}`;
 ---
 
@@ -125,7 +126,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
     <desc id="lc-desc">{desc}</desc>
     <g class="fx" style="--d: 0.15s">
       <rect x={X(md)} y="24" width={X(f) - X(md)} height={AX - 24} class="band-m"></rect>
-      <rect x={X(f)} y="24" width={X(60) - X(f)} height={AX - 24} class="band-f"></rect>
+      <rect x={X(f)} y="24" width={X(domain) - X(f)} height={AX - 24} class="band-f"></rect>
       <text x="48" y="42" class="bandname">small</text>
       <text x={X(md) + 8} y="42" class="bandname">mid</text>
       <text x={X(f) + 8} y="42" class="bandname">frontier</text>
@@ -133,7 +134,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
       <text x={X(f)} y="206" class="mid b sm">{f.toFixed(1)}</text>
       <text x={X(md)} y="206" class="mid b sm">{md.toFixed(1)}</text>
     </g>
-    <path d={`M40 ${AX} H${X(60)}`} pathLength="1" class="axis"></path>
+    <path d={`M40 ${AX} H${X(domain)}`} pathLength="1" class="axis"></path>
     {
       ticks.map((t) => (
         <g class="fx" style="--d: 0.3s">
@@ -173,15 +174,15 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
       <text x="40" y="248" class="sm" data-cap="pick"></text>
     </g>
     <g class="fx" style="--d: 1.3s">
-      <text x="916" y="60" class="end b">{opus.name}</text>
-      <text x="916" y="76" class="end sm">{opus.index.toFixed(1)}</text>
-      <text x="916" y="92" class="end sm">best of the day</text>
+      <text x="916" y="60" class="end b">{bestName}</text>
+      <text x="916" y="76" class="end sm">{best.index.toFixed(1)}</text>
+      <text x="916" y="92" class="end sm">best of the snapshot</text>
       <path d={`M${at(hd, flash.model).cx} ${at(hd, flash.model).cy - 10} V80`} class="leader"></path>
       <text x={at(hd, flash.model).cx - 6} y="58" class="b">{flash.name}</text>
       <text x={at(hd, flash.model).cx - 6} y="74" class="sm">{flash.index.toFixed(1)}</text>
-      <path d={`M${at(hd, terra.model).cx} ${at(hd, terra.model).cy - 7} V96`} class="leader"></path>
-      <text x={at(hd, terra.model).cx - 7} y="104" class="end b halo">{terra.name}</text>
-      <text x={at(hd, terra.model).cx - 7} y="118" class="end sm soft halo">{terra.index.toFixed(1)}, {over} above mid</text>
+      <path d={`M${at(hd, hydrogen.model).cx} ${at(hd, hydrogen.model).cy - 7} V96`} class="leader"></path>
+      <text x={at(hd, hydrogen.model).cx - 7} y="104" class="end b halo">{hydrogen.name}</text>
+      <text x={at(hd, hydrogen.model).cx - 7} y="118" class="end sm soft halo">{hydrogen.index.toFixed(1)}, {over} above mid</text>
     </g>
   </svg>
 
@@ -200,13 +201,13 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
     <desc id="lc-descm">{desc}</desc>
     <g class="fx" style="--d: 0.15s">
       <rect x="56" y={Yv(f)} width="296" height={Yv(md) - Yv(f)} class="band-m"></rect>
-      <rect x="56" y={Yv(60)} width="296" height={Yv(f) - Yv(60)} class="band-f"></rect>
+      <rect x="56" y={Yv(domain)} width="296" height={Yv(f) - Yv(domain)} class="band-f"></rect>
       <text x="346" y={Yv(f) - 6} class="end bandname">frontier · {f.toFixed(1)}</text>
       <text x="346" y={Yv(md) - 6} class="end bandname">mid · {md.toFixed(1)}</text>
       <text x="346" y={Yv(md) + 16} class="end bandname">small</text>
       <path d={`M56 ${Yv(f)} H352 M56 ${Yv(md)} H352`} class="cut"></path>
     </g>
-    <path d={`M56 ${Yv(0)} V${Yv(60)}`} pathLength="1" class="axis"></path>
+    <path d={`M56 ${Yv(0)} V${Yv(domain)}`} pathLength="1" class="axis"></path>
     {
       ticks.map((t) => (
         <g class="fx" style="--d: 0.3s">
@@ -241,7 +242,7 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
         vd
           .filter((d) => named.has(d.m.id))
           .map((d) =>
-            d.m.id === terra.model ? (
+            d.m.id === hydrogen.model ? (
               <path d={`M${d.cx + 7} ${d.cy} H112 V${d.cy + 14} H124`} class="leader" />
             ) : (
               <path d={`M${d.cx + 9} ${d.cy} H124`} class="leader" />
@@ -249,10 +250,12 @@ const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} 
           )
       }
       <text x="130" y={at(vd, opus.model).cy + 4} class="b">{opus.name} {opus.index.toFixed(1)}</text>
-      <text x="130" y={at(vd, opus.model).cy + 18} class="sm soft">best of the day</text>
+      <text x="130" y={at(vd, opus.model).cy + 18} class="sm soft">frontier in this pool</text>
+      <text x="130" y={Yv(best.index) + 4} class="b">{bestName} {best.index.toFixed(1)}</text>
+      <text x="130" y={Yv(best.index) + 18} class="sm soft">best of the snapshot</text>
       <text x="130" y={at(vd, flash.model).cy + 4} class="b">{flash.name} {flash.index.toFixed(1)}</text>
-      <text x="130" y={at(vd, terra.model).cy + 18} class="b">{terra.name} {terra.index.toFixed(1)}</text>
-      <text x="130" y={at(vd, terra.model).cy + 32} class="sm soft">mid: {over} above the line</text>
+      <text x="130" y={at(vd, hydrogen.model).cy + 18} class="b">{hydrogen.name} {hydrogen.index.toFixed(1)}</text>
+      <text x="130" y={at(vd, hydrogen.model).cy + 32} class="sm soft">mid: {over} above the line</text>
     </g>
   </svg>
   <p class="sr-only">{n} models plotted{unscored.length ? `; ${unscored.join(', ')} ${unscored.length === 1 ? 'has' : 'have'} no score yet` : ''}.</p>

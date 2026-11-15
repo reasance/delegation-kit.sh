@@ -9,7 +9,6 @@ interface PageMeta {
   title?: string;
   description?: string;
   path?: string;
-  preview?: boolean;
 }
 
 interface Props extends PageMeta {
@@ -19,23 +18,7 @@ interface Props extends PageMeta {
 const merged = { ...Astro.props, ...Astro.props.frontmatter };
 const baseFrontmatter = { ...merged, doc: true };
 
-const previewNav = [
-  {
-    group: 'Next release · unreleased',
-    items: [
-      { href: '/next/', label: 'Overview' },
-      { href: '/next/models/', label: 'Model benchmarks' },
-      { href: '/next/configuration/', label: 'Configuration' },
-      { href: '/next/compatibility/', label: 'Compatibility' },
-      { href: '/next/router/', label: 'Router reference' },
-      { href: '/next/executors/', label: 'Executors' },
-      { href: '/next/changelog/', label: 'Changelog' },
-      { href: '/next/snapshot.json', label: 'Snapshot provenance' },
-      { href: '/docs/', label: 'Published documentation' }
-    ]
-  }
-];
-const releasedNav = [
+const docNav = [
   { group: 'Start', items: [{ href: '/docs/', label: 'Getting started' }] },
   {
     group: 'Router',
@@ -56,11 +39,10 @@ const releasedNav = [
     items: [
       { href: '/docs/compatibility/', label: 'Compatibility' },
       { href: '/changelog/', label: 'Changelog' },
-      { href: '/next/models/', label: 'Next release preview' }
+      { href: '/docs/models/', label: 'Model benchmarks' }
     ]
   }
 ];
-const docNav = merged.preview ? previewNav : releasedNav;
 const current = merged.path ?? '';
 const isCurrent = (href: string) => href.replace(/\/$/, '') === current.replace(/\/$/, '');
 ---

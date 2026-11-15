@@ -159,14 +159,6 @@ const navLink =
       </nav>
     </header>
 
-    <aside aria-label="Release preview" class="max-w-6xl mx-auto px-6 py-5 text-sm">
-      <p>
-        <strong>Next release preview:</strong> Fable 5.2, Gemini 4 Hydrogen and Carbon.
-        <a href="/next/models/" class="underline">See benchmarks, roles and CLI availability →</a>
-        These changes are unreleased; npm currently serves v0.36.0.
-      </p>
-    </aside>
-
     <main id="main" class:list={['max-w-6xl mx-auto px-6', isDoc ? 'doc py-12' : 'py-8']}>
       <slot />
     </main>
@@ -189,7 +181,7 @@ const navLink =
         </span>
         <span class="font-mono">
           <a href={kit.releaseUrl} class={navLink} rel="noopener">v{kit.version}</a>
-          · release example scores of {catalog.catalogVersion}
+          · scores of {catalog.catalogVersion}
         </span>
       </div>
     </footer>

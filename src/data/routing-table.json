@@ -246,7 +246,7 @@
     },
     {
       "profile": "fable-judge",
-      "model": "claude-fable-5-1",
+      "model": "claude-fable-5-2",
       "family": "anthropic",
       "adapter": "claude-code",
       "lane": "judgement",
@@ -260,7 +260,7 @@
     },
     {
       "profile": "fable-policy-annotator",
-      "model": "claude-fable-5-1",
+      "model": "claude-fable-5-2",
       "family": "anthropic",
       "adapter": "claude-code",
       "lane": "policy-annotation",
@@ -1269,6 +1269,125 @@
       "technical_compatibility": true,
       "capabilities": [
         "native-profile"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "fable-judge-max",
+      "model": "claude-fable-5-2",
+      "family": "anthropic",
+      "adapter": "claude-code",
+      "lane": "judgement",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "native-profile"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "hydrogen-scout",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "scout",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "hydrogen-builder",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "builder",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "hydrogen-builder",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "frontend-builder",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "hydrogen-builder",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "reviewer",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "hydrogen-builder-xhigh",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "builder",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "hydrogen-builder-xhigh",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "frontend-builder",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "carbon-judge",
+      "model": "gemini-4-carbon",
+      "family": "google",
+      "adapter": "agy",
+      "lane": "judgement",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
       ],
       "selection": "explicit-only",
       "review_policy": "optional"

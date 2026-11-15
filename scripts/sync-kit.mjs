@@ -238,6 +238,7 @@ await emit('src/data/catalog.json', json(ladder));
 const routeFor = {
   'README.md': '/',
   'CHANGELOG.md': '/changelog',
+  'docs/model-benchmarks.md': '/docs/models/',
   'docs/router.md': '/docs/router',
   'docs/user-configuration.md': '/docs/configuration',
   'docs/external-executors.md': '/docs/executors',
@@ -285,6 +286,7 @@ async function syncDoc(sourcePath, sitePath) {
 await syncDoc('docs/user-configuration.md', 'src/pages/docs/configuration.md');
 await syncDoc('docs/external-executors.md', 'src/pages/docs/executors.md');
 await syncDoc('docs/compatibility.md', 'src/pages/docs/compatibility.md');
+await syncDoc('docs/model-benchmarks.md', 'src/pages/docs/models.md');
 await syncDoc('docs/router.md', 'src/pages/docs/router.md');
 
 const firstVersion = changelog.match(/^## \[/m);

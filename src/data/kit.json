@@ -1,12 +1,12 @@
 {
-  "version": "0.36.0",
-  "releaseTag": "delegation-kit--v0.36.0",
-  "releaseUrl": "https://github.com/reasance/delegation-kit/releases/tag/delegation-kit--v0.36.0",
-  "releaseDate": "2026-10-28",
+  "version": "0.37.0",
+  "releaseTag": "delegation-kit--v0.37.0",
+  "releaseUrl": "https://github.com/reasance/delegation-kit/releases/tag/delegation-kit--v0.37.0",
+  "releaseDate": "2026-11-15",
   "schemaVersion": 3,
   "reviewPolicy": "optional",
-  "profiles": 31,
-  "laneRows": 88,
+  "profiles": 36,
+  "laneRows": 96,
   "lanes": [
     "builder",
     "clerk",
@@ -30,6 +30,7 @@
     "alibaba",
     "anthropic",
     "deepseek",
+    "google",
     "meta",
     "minimax",
     "moonshot",
@@ -39,6 +40,7 @@
     "zai"
   ],
   "adapters": [
+    "agy",
     "claude-code",
     "claude-zai",
     "codex",
@@ -179,24 +181,24 @@
     },
     "fable-judge": {
       "adapter": "claude-code",
-      "model": "claude-fable-5-1",
+      "model": "claude-fable-5-2",
       "family": "anthropic",
       "roles": [
         "judgement"
       ],
       "parameters": {
-        "effort": "max"
+        "effort": "high"
       }
     },
     "fable-policy-annotator": {
       "adapter": "claude-code",
-      "model": "claude-fable-5-1",
+      "model": "claude-fable-5-2",
       "family": "anthropic",
       "roles": [
         "policy-annotation"
       ],
       "parameters": {
-        "effort": "xhigh"
+        "effort": "high"
       }
     },
     "glm53-flash-max-clerk": {
@@ -456,7 +458,65 @@
       "parameters": {
         "effort": "max"
       }
+    },
+    "fable-judge-max": {
+      "adapter": "claude-code",
+      "model": "claude-fable-5-2",
+      "family": "anthropic",
+      "roles": [
+        "judgement"
+      ],
+      "parameters": {
+        "effort": "max"
+      }
+    },
+    "hydrogen-scout": {
+      "adapter": "agy",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "roles": [
+        "scout"
+      ],
+      "parameters": {
+        "effort": "medium"
+      }
+    },
+    "hydrogen-builder": {
+      "adapter": "agy",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "roles": [
+        "builder",
+        "frontend-builder",
+        "reviewer"
+      ],
+      "parameters": {
+        "effort": "high"
+      }
+    },
+    "hydrogen-builder-xhigh": {
+      "adapter": "agy",
+      "model": "gemini-4-hydrogen",
+      "family": "google",
+      "roles": [
+        "builder",
+        "frontend-builder"
+      ],
+      "parameters": {
+        "effort": "xhigh"
+      }
+    },
+    "carbon-judge": {
+      "adapter": "agy",
+      "model": "gemini-4-carbon",
+      "family": "google",
+      "roles": [
+        "judgement"
+      ],
+      "parameters": {
+        "effort": "high"
+      }
     }
   },
-  "syncedAt": "2026-10-28"
+  "syncedAt": "2026-11-15"
 }
