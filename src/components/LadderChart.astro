@@ -103,7 +103,7 @@ const css = `
 .lc-d{display:none}
 @media (min-width:1024px){.lc-d{display:block}.lc-m{display:none}}
 `;
-const desc = `Artificial Analysis Intelligence Index v${indexVersion} scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model, using the example effort for ringed models and the best measured setting for other models. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) is small; ${terra.name} (${terra.index}) is mid, ${over} above the mid line.`;
+const desc = `Published release example, using the historical catalog snapshot. Artificial Analysis Intelligence Index v${indexVersion} scores from 0 to 60 on ${catalog.catalogVersion}, one dot per model, using the example effort for ringed models and the best measured setting for other models. The best score of the day is ${opus.name} at ${cuts.top}. Within ${tiering.frontier_within} points of it (${f} and up): frontier, the strongest tier. Within ${tiering.mid_within} points (${md} and up): mid. Below: small. The three models in the examples: ${opus.name} is frontier, ${flash.name} (${flash.index}) is small; ${terra.name} (${terra.index}) is mid, ${over} above the mid line.`;
 const title = (d: (typeof hd)[number]) => `${d.m.id} · ${d.m.index.toFixed(1)} · ${d.m.tier}`;
 ---
 

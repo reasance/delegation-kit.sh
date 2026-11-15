@@ -1,0 +1,41 @@
+{
+  "project": "delegation-kit",
+  "status": "unreleased",
+  "capturedAt": "2026-11-14",
+  "benchmarkSnapshot": "2026-11-13",
+  "benchmarkVersion": "5.0.1",
+  "publishedNpmVersion": "0.36.0",
+  "sourceBranch": "models/hydrogen-carbon-cli",
+  "sourceHead": "0722cf58e3430859e86d75e0dcfbc0d09bd4213e",
+  "sourceDirty": true,
+  "files": {
+    "README.md": {
+      "sha256": "c6748ebf9aa7acfff5e8fd075133c5a644c6487adc42207c97cf1d184ad503b3",
+      "page": "/next/"
+    },
+    "docs/model-benchmarks.md": {
+      "sha256": "e7c74cc085b4eab536bea9bd45218d3afb29eb99b60d4dc81122d132be03d236",
+      "page": "/next/models/"
+    },
+    "docs/user-configuration.md": {
+      "sha256": "0579fce62ca3c1e419c321a9b2b6b4499c38d3c3c9dd365539dd09743add5b97",
+      "page": "/next/configuration/"
+    },
+    "docs/compatibility.md": {
+      "sha256": "b817ccf4e8c2a90b98a94871c830b9502487387b6b3017b73a292d3182761ee0",
+      "page": "/next/compatibility/"
+    },
+    "docs/router.md": {
+      "sha256": "91dd339eca8ba6e4525981e35846d5e2a62ed3e0ffbfc92ec84c059aaf136352",
+      "page": "/next/router/"
+    },
+    "docs/external-executors.md": {
+      "sha256": "5bcc9ae4fff7d747e0d0656ac0926d467fce64274879849d701266082b7f4696",
+      "page": "/next/executors/"
+    },
+    "CHANGELOG.md": {
+      "sha256": "f07e51a4eee5dfe86d9ecc8e70bdc0976a9944bd1a5ee5be09dd2924285c61fa",
+      "page": "/next/changelog/"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import kit from '../data/kit.json';
 import CodeBlock from '../components/CodeBlock.astro';
 import ExampleTable from '../components/ExampleTable.astro';
 import LadderChart from '../components/LadderChart.astro';
@@ -131,9 +132,40 @@ delegation-config show  # your models`}
     </p>
   </section>
 
+  <section
+    id="model-preview"
+    aria-labelledby="model-preview-title"
+    class="max-w-6xl mx-auto px-6 py-12"
+  >
+    <p class="eyebrow mb-4">Next release · unreleased · AA v5.0.1 · November 13, 2026</p>
+    <h2 id="model-preview-title" class="text-3xl md:text-4xl mb-6">
+      New models, with explicit roles.
+    </h2>
+    <p class="max-w-2xl mb-5">
+      Fable 5.2/high scores 61.8 and max 64.6. Carbon/high scores 60.0; Hydrogen/high 50.8 and xhigh
+      53.9. Each score belongs to that effort. Frontier starts at 56.6 and mid at 44.6.
+    </p>
+    <p class="max-w-2xl mb-5">
+      Hydrogen/medium is a scout, high a builder or reviewer, and xhigh a deeper builder option.
+      Carbon/high is an optional judge; Fable 5.2 judgement profiles remain available. Your personal
+      router pool, default and decider stay under your control.
+    </p>
+    <p class="max-w-2xl mb-5">
+      Carbon stays optional through Antigravity/agy, requires an enabled Ultra or Enterprise
+      account, and must appear under its exact requested ID. It was absent from the checked local
+      inventory; Hydrogen was present. No model or API substitution.
+    </p>
+    <p>
+      <a href="/next/models/" class="underline">Benchmarks and provider limits →</a>
+      · <a href="/next/configuration/" class="underline">Role configuration →</a>
+    </p>
+  </section>
+
   <!-- How it picks a model -->
   <section id="how" class="rule pt-16 pb-20 scroll-mt-20">
     <h2 class="text-3xl md:text-4xl mb-10" data-reveal>How it picks a model</h2>
+    <p class="mb-8 max-w-2xl text-sm">This worked example uses the published v{kit.version} catalog from {catalogVersion}.
+      The unreleased <a href="/next/models/" class="underline">v5.0.1 snapshot</a> has new scores and bands.</p>
     <ol role="list" class="grid gap-8">
       <li class={pickRow} data-reveal>
         <div>
@@ -169,7 +201,7 @@ delegation-config show  # your models`}
     </ol>
 
     <div class="mt-16">
-      <p class="eyebrow mb-4" data-reveal>Intelligence Index v{indexVersion} · {catalogVersion}</p>
+      <p class="eyebrow mb-4" data-reveal>Published example · Intelligence Index v{indexVersion} · {catalogVersion}</p>
       <LadderChart />
       <p class="mt-4 max-w-2xl text-[var(--color-ink-soft)]">
         Ringed dots use the efforts in this example; other dots use each model's best measured setting.
