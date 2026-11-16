@@ -10,7 +10,7 @@ path: '/docs/models'
 
 # Model reference: Artificial Analysis Intelligence Index v5.0.1
 
-Generated from controller-models; snapshot 2026-11-15. Each score belongs to its measured effort and benchmark revision.
+Generated from controller-models; snapshot 2026-11-16. Each score belongs to its measured effort and benchmark revision.
 
 | Model | Measured effort | Index v5.0.1 | AA USD/task | Serving evidence |
 |---|---|---:|---:|---|
@@ -31,10 +31,11 @@ Generated from controller-models; snapshot 2026-11-15. Each score belongs to its
 | Gemini 3.8 Flash | high | 30.8 | $7.77 | registered transports |
 | Gemini 3.8 Flash | medium | 30.1 | $6.26 | registered transports |
 | Gemini 3.8 Flash | low | 22.5 | unknown | registered transports |
+| Qwen4 Max | default | 42.9 | $3.27 | Token Plan API ping and direct-adapter discovery verified |
 
 ## Integration decision
 
-Add agy profiles hydrogen-scout/medium, hydrogen-builder/high, hydrogen-builder-xhigh and carbon-judge/high. Their declared roles preserve the prompt-only/text-patch boundary. Carbon is optional and requires an exact inventory match; Fable 5.2 judgement/annotation profiles remain. No personal router pool, default or decider is rewritten.
+Add agy profiles hydrogen-scout/medium, hydrogen-builder/high, hydrogen-builder-xhigh and carbon-judge/high. Their declared roles preserve the prompt-only/text-patch boundary. Carbon is optional and requires an exact inventory match; Fable 5.2 judgement/annotation profiles remain. The optional qwen4-max/high profile covers builder, clerk and scout; the older Qwen profile remains an explicit choice. No personal router pool, default or decider is rewritten.
 
 ## Provider contracts
 
@@ -47,6 +48,16 @@ Hydrogen uses gemini-4-hydrogen on the API and exact level IDs gemini-4-hydrogen
 Carbon has a unified 1,048,576-token input/output window. Foreground generation supports up to 65,536 output tokens when streaming and 32,768 when non-streaming in the Cloud contract. These provider API limits are not agy CLI output limits. ai-consultants keeps a configured 32,768-token API budget; Carbon remains CLI-only here. Long decode needs continuation or background support and is not enabled by these integrations. Do not send thinking_budget or MINIMAL; sampling overrides are ignored. Explicit context caching is unsupported.
 
 Carbon standard API input/output prices are $2/$10 per million tokens through November 30, 2026, then $4/$20 from December 1. Thinking tokens count as output. ai-consultants uses list rates for conservative estimates; delegation-kit's catalog uses the current promotional rate. Neither estimate is a subscription invoice.
+
+Qwen4 uses final `qwen4-max`; `qwen4-max-preview` is separate. The final model supports low/high/xhigh thinking (default high), 1,000,000 total context tokens, and up to 262,144 combined thinking and answer tokens (131,072 output without thinking). The maximum thinking-mode input is 983,616 tokens. OpenAI max_tokens and max_completion_tokens both cap thinking plus answer. Do not reuse the preview model's 393,216-token limit or its effort defaults.
+
+The November 16 authenticated QwenCloud Token Plan request returned HTTP 200, PONG and provider-reported qwen4-max in 4.03 seconds, with thinking disabled and no retries or fallback. This establishes account access on that API, not CLI compatibility or coding quality. AA has one default variant at 42.9 and $3.2681/task; its effort is not disclosed, so this score is not an xhigh measurement. Its model-level default score remains below the 44.6 mid floor. A high profile has no effort-matched score or automatic tier.
+
+A separate November 16 check through bottega-kit's actual Claude harness and the QwenCloud Anthropic endpoint used final qwen4-max with requested high effort. It returned the exact hidden code and all five paragraphs in 13.5 seconds, with provider-reported qwen4-max. Claude reported 257 output tokens and no thinking tokens for this short extraction. Its displayed USD 0.0353435 has unknown cost basis, so it is not a Token Plan credit invoice or coding qualification.
+
+QwenCloud Singapore pay-as-you-go prices are $1.50/$4.50 per million input/output tokens, without input-length tiers; Beijing/Global rates are $1.413/$4.24. Token Plan consumes credits instead. ai-consultants retains explicit unpriced/credit disclosure for Qwen rather than presenting list-price estimates as subscription billing. Existing personal model selections and provider credentials are preserved.
+
+Qwen sources: [final model](https://docs.qwencloud.com/developer-guides/getting-started/latest-model), [official pricing](https://docs.qwencloud.com/developer-guides/getting-started/pricing), [AA Qwen4 Max](https://artificialanalysis.ai/models/qwen4-max).
 
 ## Comparison scope
 

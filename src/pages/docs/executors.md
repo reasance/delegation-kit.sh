@@ -40,7 +40,7 @@ are read from is in [keys and environment](/docs/configuration#keys-and-environm
 | `kimi-code-cli` | clerk, scout, policy-annotation: `read-only` · builder, frontend-builder: `worktree-edit` | max |
 | `muse-code-cli` | clerk, scout, reviewer, policy-annotation: `read-only` · builder, frontend-builder: `worktree-edit` | minimal … max (high) |
 | `grok-build-cli` | policy-annotation: `read-only` · builder, frontend-builder: `worktree-edit` | high |
-| `token-plan-openai` | text roles: `text-patch` | minimal … max (xhigh) |
+| `token-plan-openai` | text roles: `text-patch` | minimal … max (high; Qwen4 canonical low/high/xhigh) |
 | `deepseek-api` | text roles: `text-patch` | minimal … max (max) |
 | `openai-compatible` | text roles: `text-patch` | minimal … max, sent only when declared (none) |
 | `agy` | scout, builder, frontend-builder, reviewer, judgement: `read-only` | low, medium, high; xhigh only for Hydrogen |
@@ -124,7 +124,7 @@ Meta's Muse models ship two ways, and you choose by profile:
 ## Checking a text patch
 
 `delegation-patch-verify` enforces the versioned policy in
-[`config/external-patch-policy.json`](https://github.com/reasance/delegation-kit/blob/delegation-kit--v0.37.0/config/external-patch-policy.json).
+[`config/external-patch-policy.json`](https://github.com/reasance/delegation-kit/blob/delegation-kit--v0.38.0/config/external-patch-policy.json).
 It never applies a patch: it parses it, checks it against the policy, fixes
 the strip level from the header shape, runs `git apply --check` at that one
 level, and prints a receipt with no patch content.
@@ -230,5 +230,44 @@ requested CLI ID before dispatch. Carbon requires an enabled Ultra/Enterprise
 account. Missing access refuses the request without another model or an API
 substitution. The standalone adapter default remains Flash; shipped profiles
 name their own model and effort explicitly.
+
+## Qwen4 Max on Token Plan
+
+The optional shipped `qwen4-max` profile uses `token-plan-openai`, model
+`qwen4-max`, effort `high`, and builder/clerk/scout roles. It does not change
+your personal router pool, default, decider, review policy or installed
+configuration. The older `qwen3.8-max` profile stays an explicit choice and
+keeps its model and xhigh effort. Add the new profile deliberately rather than
+renaming an existing personal pin.
+
+The runner and direct HTTP router use
+`https://token-plan.maas.qwencloudapi.com/compatible-mode/v1/chat/completions`.
+Supply the matching Token Plan credential through `QWEN_TOKEN_PLAN_API_KEY`
+or the profile's declared `credential_env`; this is not a pay-as-you-go key.
+`delegation-qwen check --json` keeps the legacy `next_snapshot` field for
+compatibility and now checks the exact final `qwen4-max` ID. Missing access or
+request failure never selects `qwen4-max-preview`, an older model or another
+provider.
+
+The final model supports low/high/xhigh (default high); provider aliases map
+minimal to low, medium to high and max to xhigh. Profiles use canonical high.
+`max_tokens` is a combined thinking-and-answer budget for Qwen4, equivalent to
+`max_completion_tokens`, not an answer-only allowance. The provider ceiling
+is 262,144 with thinking or 131,072 without it. The runner keeps its existing
+4,096-token default; choose a larger profile budget explicitly for reasoning.
+The adapter's thinking-on policy remains; `none` is not a runner effort.
+
+One November 16 authenticated API ping returned HTTP 200, PONG and
+provider-reported qwen4-max in 4.03 seconds, thinking disabled, 32 input and 3
+output tokens, without retry/fallback. It verifies access, not coding quality.
+AA v5.0.1 reports 42.9 at an undisclosed default effort and $3.2681/task;
+there is no separate coding/agentic index. The model-level default score is
+small (mid starts at 44.6), but the explicit high profile has no effort-matched
+score or automatic tier. Explicit selection remains possible; no review gate
+is promoted. Discovery failures (including 401) are unknown, not evidence
+that the model is missing. A ready backend only confirms local prerequisites.
+
+[Final contract](https://docs.qwencloud.com/developer-guides/getting-started/latest-model)
+· [Benchmark reference](/docs/models/)
 
 <!-- END AUTOGEN -->
