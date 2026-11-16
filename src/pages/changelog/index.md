@@ -17,6 +17,19 @@ Every release, newest first.
 
 ## [Unreleased]
 
+## [0.38.0] — 2026-11-16
+
+### Changed
+
+- Add an optional qwen4-max/high builder, clerk and scout profile, refresh the AA v5.0.1 catalog and use the current QwenCloud Token Plan endpoint. The standalone runner defaults to the final model at high; existing profile model/effort pins remain explicit. No personal router pool or review gate changes; no preview fallback.
+
+- Distinguish failed or unauthorized model discovery from a successful list without the exact model ID; preview does not count as final-model access.
+
+
+### Fixed
+
+- Keep the decider deadline regression independent of CLI startup on busy runners; the provider timeout remains one second in the test.
+
 ## [0.37.0] — 2026-11-15
 
 - Add agy Hydrogen scout/medium and builder/high/xhigh profiles plus an optional Carbon/high judge. Extend the adapter to low/medium/high/xhigh with per-model validation and exact inventory checks; preserve prompt-only isolation and personal router choices.

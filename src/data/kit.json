@@ -1,12 +1,12 @@
 {
-  "version": "0.37.0",
-  "releaseTag": "delegation-kit--v0.37.0",
-  "releaseUrl": "https://github.com/reasance/delegation-kit/releases/tag/delegation-kit--v0.37.0",
-  "releaseDate": "2026-11-15",
+  "version": "0.38.0",
+  "releaseTag": "delegation-kit--v0.38.0",
+  "releaseUrl": "https://github.com/reasance/delegation-kit/releases/tag/delegation-kit--v0.38.0",
+  "releaseDate": "2026-11-16",
   "schemaVersion": 3,
   "reviewPolicy": "optional",
-  "profiles": 36,
-  "laneRows": 96,
+  "profiles": 37,
+  "laneRows": 99,
   "lanes": [
     "builder",
     "clerk",
@@ -516,7 +516,20 @@
       "parameters": {
         "effort": "high"
       }
+    },
+    "qwen4-max": {
+      "adapter": "token-plan-openai",
+      "model": "qwen4-max",
+      "family": "alibaba",
+      "roles": [
+        "builder",
+        "clerk",
+        "scout"
+      ],
+      "parameters": {
+        "effort": "high"
+      }
     }
   },
-  "syncedAt": "2026-11-15"
+  "syncedAt": "2026-11-16"
 }

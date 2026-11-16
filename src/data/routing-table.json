@@ -1391,6 +1391,51 @@
       ],
       "selection": "explicit-only",
       "review_policy": "optional"
+    },
+    {
+      "profile": "qwen4-max",
+      "model": "qwen4-max",
+      "family": "alibaba",
+      "adapter": "token-plan-openai",
+      "lane": "builder",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "qwen4-max",
+      "model": "qwen4-max",
+      "family": "alibaba",
+      "adapter": "token-plan-openai",
+      "lane": "clerk",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
+    },
+    {
+      "profile": "qwen4-max",
+      "model": "qwen4-max",
+      "family": "alibaba",
+      "adapter": "token-plan-openai",
+      "lane": "scout",
+      "configuration_valid": true,
+      "technical_compatibility": true,
+      "capabilities": [
+        "read-only",
+        "text-patch"
+      ],
+      "selection": "explicit-only",
+      "review_policy": "optional"
     }
   ]
 }
