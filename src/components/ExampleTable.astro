@@ -5,11 +5,6 @@
 // table, so a screen reader reads it as one; below md each row stacks and
 // every cell carries its own label.
 //
-// With `rotate`, the three rows cycle together through four sets of models
-// from different vendors (example-pool.ts checks that the rule sends each
-// request to the model shown, tier included): CSS only, one keyframe set
-// shared by the rows, so every frame is one consistent set. Reduced motion
-// shows the first set, still; a screen reader gets each row's models as text.
 import { examples, rating, priceTag, heroOptions } from '../lib/example-pool';
 
 interface Props {
@@ -17,39 +12,17 @@ interface Props {
   count?: number;
   /** Add the one-line reason for each choice. */
   why?: boolean;
-  /** Cycle the three rows together through the hero's model sets. */
-  rotate?: boolean;
+  /** Which measured example pool to show. Omit for the reference table. */
+  poolIndex?: number;
   /** Home page story: the decider rates the rows one by one (scripts/motion.ts). */
   story?: boolean;
   caption: string;
 }
-const { count = examples.length, why = false, rotate = false, story = false, caption } = Astro.props;
-const rows = examples.slice(0, count).map((x, i) => ({
-  ...x,
-  options: rotate ? heroOptions[i] : []
-}));
-
-/** Seconds each model stays, of which the slide to the next takes SLIDE. */
-const STEP = 3.2;
-const SLIDE = 0.45;
-const pct = (n: number) => `${n.toFixed(3)}%`;
-/** Hold each model, slide to the next; the list repeats the first at the end, so the loop is seamless. */
-function keyframes(name: string, n: number) {
-  const total = n * STEP;
-  const at = (k: number) => `transform:translateY(calc(var(--h) * -${k}))`;
-  const frames = [`0%{${at(0)}}`];
-  for (let k = 0; k < n; k++) {
-    frames.push(`${pct(((k * STEP + STEP - SLIDE) / total) * 100)}{${at(k)}}`);
-    frames.push(`${pct((((k + 1) * STEP) / total) * 100)}{${at(k + 1)}}`);
-  }
-  return `@keyframes ${name}{${frames.join('')}}`;
-}
-
-const frames = rotate ? heroOptions[0].length : 0;
-const motion =
-  frames > 1
-    ? `${keyframes('xr', frames)}.xt .rot-list{animation:xr ${(frames * STEP).toFixed(2)}s cubic-bezier(.65,0,.35,1) 1.2s infinite}`
-    : '';
+const { count = examples.length, why = false, poolIndex, story = false, caption } = Astro.props;
+const rows = examples.slice(0, count).map((x, i) => {
+  const option = poolIndex === undefined ? undefined : heroOptions[i]?.[poolIndex];
+  return { ...x, option };
+});
 
 const css = `
 .xt{width:100%;border-collapse:collapse}
@@ -65,13 +38,6 @@ const css = `
 .xt .tier-mid{border-color:var(--color-ink-soft);color:var(--color-ink)}
 .xt .tier-frontier{background:var(--color-ink);border-color:var(--color-ink);color:var(--color-paper)}
 .xt .lbl{display:none}
-.xt .rot{--h:2.75rem;display:inline-block;height:var(--h);overflow:hidden;vertical-align:top}
-.xt .tier-fixed{margin:0 .5rem 0 0;min-width:4.9rem;text-align:center}
-.xt .rot-list{display:flex;flex-direction:column}
-.xt .rot-item{height:var(--h);display:flex;flex-direction:column;justify-content:flex-start;white-space:nowrap}
-.xt .rot .cost{margin:.1rem 0 0 5.4rem}
-${motion}
-@media (prefers-reduced-motion:reduce){.xt .rot-list{animation:none!important}}
 .xt tr.is-on td{background:var(--color-panel)}
 .xt tr.is-on td:first-child{box-shadow:-.75rem 0 0 var(--color-panel)}
 .xt .rate-in{transition:background-color .3s var(--ease-base),box-shadow .3s var(--ease-base)}
@@ -81,10 +47,10 @@ ${motion}
 .xt tr{display:block;border-top:1px solid var(--color-line);padding:.75rem 0}
 .xt tr:last-child{border-bottom:1px solid var(--color-line)}
 .xt td,.xt tr:last-child td{display:block;border:0;padding:.15rem 0}
-.xt .lbl{display:inline-block;min-width:6.5rem;font-family:var(--font-mono);font-size:.75rem;color:var(--color-ink-soft)}
-.xt .cost{margin:.1rem 0 0 6.5rem}
-.xt .rot .cost{margin:.1rem 0 0 5.4rem}
-.xt .rot{display:block;margin:.35rem 0 0}
+.xt .rate{white-space:normal}
+.xt .lbl{display:inline-block;margin-right:.6rem;font-family:var(--font-mono);font-size:.75rem;color:var(--color-ink-soft)}
+.xt .cost{margin:.1rem 0 0}
+.xt .who{overflow-wrap:anywhere}
 }
 `;
 ---
@@ -104,38 +70,23 @@ ${motion}
     <tbody>
       {
         rows.map((x, i) => (
-          <tr data-reveal={story ? 'up' : undefined} style={story ? `--d: ${(0.35 + i * 0.08).toFixed(2)}s` : undefined}>
+          <tr
+            data-reveal={story ? 'up' : undefined}
+            style={story ? `--d: ${(0.35 + i * 0.08).toFixed(2)}s` : undefined}
+          >
             <td class="req">{x.request}</td>
             <td class="rate">
               <span class="lbl">Rated</span>
               <span class="rate-in">{rating(x.v)}</span>
             </td>
-            {rotate ? (
-              <td>
-                <span class="lbl">Answered by</span>
-                <span class="rot" aria-hidden="true">
-                  <span class="rot-list">
-                    {[...x.options, x.options[0]].map((o) => (
-                      <span class="rot-item">
-                        <span>
-                          <span class={`tier tier-fixed tier-${o.tier}`}>{o.tier}</span>
-                          <span class="who">{o.name}</span>
-                        </span>
-                        <span class="cost">~{o.cost} a request</span>
-                      </span>
-                    ))}
-                  </span>
-                </span>
-                <span class="sr-only">{x.options.map((o) => o.name).join(', or ')}</span>
-              </td>
-            ) : (
-              <td>
-                <span class="lbl">Answered by</span>
-                <span class="who">{x.r.chosen.name}</span>
-                <span class={`tier tier-${x.r.chosen.tier}`}>{x.r.chosen.tier}</span>
-                <span class="cost">~{priceTag(x.r.chosen)} a request</span>
-              </td>
-            )}
+            <td>
+              <span class="lbl">Answered by</span>
+              <span class="who">{x.option?.name ?? x.r.chosen.name}</span>
+              <span class={`tier tier-${x.option?.tier ?? x.r.chosen.tier}`}>
+                {x.option?.tier ?? x.r.chosen.tier}
+              </span>
+              <span class="cost">~{x.option?.cost ?? priceTag(x.r.chosen)} a request</span>
+            </td>
             {why && (
               <td class="why">
                 <span class="lbl">Why</span>

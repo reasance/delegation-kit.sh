@@ -12,23 +12,30 @@ const { code, lang = 'sh', label, typing = false } = Astro.props;
 ---
 
 <div class="cb-wrap min-w-0">
-  {
-    /* Mono like an eyebrow, but not uppercased: labels can hold a file path. */
-    label && <p class="mb-2 font-mono text-xs text-[var(--color-ink-soft)]">{label}</p>
-  }
-  <div class="relative group" data-reveal={typing ? 'up' : undefined}>
-    <pre
-      data-story={typing ? 'type' : undefined}
-      class="relative bg-[var(--color-ink)] text-[var(--color-paper)] px-4 py-3 overflow-x-auto text-sm leading-relaxed w-full"><code data-lang={lang}>{code}</code></pre>
+  <div class="mb-2 flex min-w-0 items-center gap-3">
+    {
+      label && (
+        <p class="min-w-0 font-mono text-xs text-[var(--color-ink-soft)] [overflow-wrap:anywhere]">
+          {label}
+        </p>
+      )
+    }
     <button
       type="button"
-      class="absolute top-2 right-2 text-xs px-2 py-1 bg-[var(--color-paper)] text-[var(--color-ink)] border border-[var(--color-line)] font-mono opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-300 ease-base"
+      class="ml-auto min-h-11 shrink-0 border border-[var(--color-line-strong)] px-3 font-mono text-xs text-[var(--color-ink)]"
       data-copy={code}
-      aria-label="Copy code to clipboard"
+      aria-label={label ? `Copy: ${label}` : 'Copy code to clipboard'}>Copy</button
     >
-      Copy
-    </button>
   </div>
+  <div class="relative group" data-reveal={typing ? 'up' : undefined}>
+    <pre
+      tabindex="0"
+      role="region"
+      aria-label={label ?? 'Code example'}
+      data-story={typing ? 'type' : undefined}
+      class="relative bg-[var(--color-ink)] text-[var(--color-paper)] px-4 py-3 overflow-x-auto text-sm leading-relaxed w-full"><code data-lang={lang}>{code}</code></pre>
+  </div>
+  <p class="text-xs empty:m-0" role="status" data-copy-status></p>
 </div>
 
 <style>
@@ -50,36 +57,34 @@ const { code, lang = 'sh', label, typing = false } = Astro.props;
     vertical-align: -0.2em;
     background: var(--color-explicit);
   }
-
-  /* Touch screens have no hover: keep the button in sight, in its own strip
-   * above the first line so it never covers code. */
-  @media (hover: none) {
-    [data-copy] {
-      opacity: 0.75;
-    }
-    pre {
-      padding-top: 2.5rem;
-    }
-  }
 </style>
 
 <script>
-  // One delegated listener for every CodeBlock on the page. The only runtime
-  // JavaScript the site ships.
+  const timers = new WeakMap<HTMLButtonElement, ReturnType<typeof setTimeout>>();
   document.addEventListener('click', async (event) => {
     const target = event.target as HTMLElement | null;
-    const btn = target?.closest<HTMLButtonElement>('button[data-copy]');
-    if (!btn) return;
-    const text = btn.dataset.copy ?? '';
-    const original = btn.textContent;
+    const button = target?.closest<HTMLButtonElement>('button[data-copy]');
+    if (!button) return;
+    const status = button.closest('.cb-wrap')?.querySelector('[data-copy-status]');
+    const previous = timers.get(button);
+    if (previous) clearTimeout(previous);
+    if (status) status.textContent = '';
     try {
-      await navigator.clipboard.writeText(text);
-      btn.textContent = 'Copied';
+      await navigator.clipboard.writeText(button.dataset.copy ?? '');
+      button.textContent = 'Copied';
+      if (status) status.textContent = 'Code copied to the clipboard.';
     } catch {
-      btn.textContent = 'Press Ctrl+C';
+      button.textContent = 'Copy';
+      if (status)
+        status.textContent = 'Clipboard unavailable. Select the code and copy it manually.';
+      return;
     }
-    setTimeout(() => {
-      btn.textContent = original;
-    }, 1200);
+    timers.set(
+      button,
+      setTimeout(() => {
+        button.textContent = 'Copy';
+        if (status) status.textContent = '';
+      }, 2200)
+    );
   });
 </script>

@@ -26,7 +26,7 @@ const anyUnsupported = table.profiles.some((row) => !row.technical_compatibility
   </p>
   <div class="not-prose">
     <CodeBlock
-      label="Terminal"
+      label="Resolve and run a profile"
       code={`delegation-route resolve --lane builder --json        # lists, runs nothing
 delegation-route resolve --lane builder --selected-profile ID --json   # validates only
 delegation-run --profile ID --lane builder \\
@@ -48,7 +48,7 @@ delegation-run --profile ID --lane builder \\
   </p>
   <div class="not-prose">
     <CodeBlock
-      label="Terminal"
+      label="Ask the router and run a profile"
       code={`delegation-router decide --prompt-file task.md --lane builder --json
 delegation-run --profile PROFILE --lane builder \\
   --prompt-file task.md --output result.txt --workdir WORKTREE`}
