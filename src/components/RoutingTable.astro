@@ -36,7 +36,7 @@ const groups = rows.reduce<Group[]>((acc, row) => {
 }, []);
 ---
 
-<table class="w-full text-[0.8rem] leading-snug border-collapse">
+<table class="w-full border-collapse text-sm leading-snug [overflow-wrap:anywhere]">
   <thead>
     <tr class="eyebrow text-left border-b border-[var(--color-line-strong)]">
       <th class="py-2 pr-4 font-normal">Profile · model / adapter / effort · capabilities</th>
@@ -49,7 +49,7 @@ const groups = rows.reduce<Group[]>((acc, row) => {
         <tr class="border-b border-[var(--color-line)] align-top">
           <td class="py-2 pr-4">
             <span class="font-mono font-medium">{g.profile}</span>
-            <span class="block font-mono text-[0.72rem] text-[var(--color-ink-soft)] break-words">
+            <span class="block font-mono text-[var(--color-ink-soft)]">
               {g.model} / {g.adapter} / {profileConfig[g.profile]?.parameters?.effort ?? '—'} ·{' '}
               {g.capabilities.join(', ')}
             </span>
