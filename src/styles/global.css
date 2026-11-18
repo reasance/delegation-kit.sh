@@ -19,6 +19,8 @@
   --color-line-strong: #181818;
   /* The ink button's hover: the next approved dark step. */
   --color-ink-hover: #313131;
+  --color-terminal: #181818;
+  --color-on-amber: #181818;
 
   --color-qualified: #1f8a5b;
   --color-explicit: #d98e04;
@@ -103,7 +105,8 @@ kbd,
 a:focus-visible,
 button:focus-visible,
 input:focus-visible + label,
-summary:focus-visible {
+summary:focus-visible,
+[role='region'][tabindex]:focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 3px;
 }
@@ -141,7 +144,7 @@ summary:focus-visible {
   text-transform: uppercase;
   padding: 0.25rem 0.4rem;
   border-radius: 2px;
-  color: #fff;
+  color: var(--color-ink);
   white-space: nowrap;
 }
 .status-compatible,
@@ -170,7 +173,7 @@ summary:focus-visible {
 }
 .status-excluded {
   background: var(--color-explicit);
-  color: var(--color-ink);
+  color: var(--color-on-amber);
 }
 
 /* Scroll reveals. `motion` is set on <html> before first paint only when
@@ -298,4 +301,47 @@ summary:focus-visible {
   font-size: 11px;
   font-weight: 500;
   text-anchor: middle;
+}
+
+/* The dispatch board after dark. The same colors carry the same signals. */
+:root {
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark light;
+    --color-paper: #15191f;
+    --color-panel: #20262e;
+    --color-ink: #eef2f7;
+    --color-ink-soft: #b6c1d1;
+    --color-line: #454f5e;
+    --color-line-strong: #8290a4;
+    --color-ink-hover: #cbd5e2;
+    --color-qualified: #79d2a0;
+    --color-qualified-text: #8de0b1;
+    --color-qualified-on-ink: #185f3f;
+    --color-qualified-soft: #1d3b30;
+    --color-explicit: #f3b84e;
+    --color-explicit-strong: #e6a93a;
+    --color-explicit-text: #ffd48b;
+    --color-explicit-soft: #47371e;
+    --color-blocked: #ffa696;
+    --color-blocked-soft: #462926;
+  }
+}
+
+@media (max-width: 359px) {
+  header nav[aria-label='Main'] {
+    gap: 0.65rem;
+    padding-inline: 0.75rem;
+  }
+  header nav[aria-label='Main'] ul {
+    gap: 0.65rem;
+  }
+}
+
+header nav ul a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 24px;
 }

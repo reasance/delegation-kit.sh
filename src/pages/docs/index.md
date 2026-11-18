@@ -24,16 +24,19 @@ which answered and why.
 
 ## 1. Install
 
+The standard install adds commands and model profiles. It also installs a
+delegation guard in the global Claude Code instructions (`CLAUDE.md`) and the
+global Codex instructions (`AGENTS.md`), so the guard applies across projects.
+Choose `--claude-only` or `--codex-only` to limit the installation to one host.
+
 ```sh
 npx delegation-kit
 ```
 
-It:
+The installer:
 
 - fetches the release and installs the commands in `~/.local/bin` (keep it on
   your PATH);
-- adds its profiles to Claude Code and Codex (`--claude-only` or
-  `--codex-only` keeps it to one);
 - asks for the Z.AI, DeepSeek and Qwen keys (Enter skips one) and saves them
   in files only you can read;
 - checks the install.

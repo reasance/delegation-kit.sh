@@ -116,7 +116,7 @@
 .doc :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.85em;
-  background: rgb(16 25 43 / 0.06);
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
   border-radius: 3px;
   padding: 0.05em 0.3em;
   color: var(--color-ink);
@@ -131,13 +131,14 @@
   border: 1px solid var(--color-line);
   border-radius: 6px;
   padding: 1rem 1.25rem;
-  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   margin: 0 0 1.25rem;
 }
 
 /* Shiki's blocks in Markdown look like the home page's: ink, square. */
 .doc pre.astro-code {
-  background: var(--color-ink) !important;
+  background: var(--color-terminal) !important;
   border: 0;
   border-radius: 0;
 }
@@ -151,16 +152,19 @@
   background: transparent;
   border: 0;
   padding: 0;
+  white-space: inherit;
   font-size: inherit;
 }
 
-.doc table:not(.not-prose *) {
-  display: block;
+.doc-table-scroll {
   overflow-x: auto;
   max-width: 100%;
+  margin: 1.5rem 0 2rem;
+}
+
+.doc table:not(.not-prose *) {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.5rem 0 2rem;
   font-size: 0.9rem;
 }
 

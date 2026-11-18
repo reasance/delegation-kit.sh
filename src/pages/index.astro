@@ -35,7 +35,7 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
   <section class="pt-10 pb-16 md:pt-16 md:pb-20">
     <p class="eyebrow mb-6" data-reveal>A model router on your own machine</p>
     <h1
-      class="hero-title max-w-2xl text-4xl sm:text-5xl md:text-6xl tracking-tight"
+      class="max-w-2xl text-4xl sm:text-5xl md:text-6xl tracking-tight"
       data-reveal
       style="--d: 0.08s"
     >
@@ -62,10 +62,26 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
     <div class="mt-12">
       <ExampleTable
         count={3}
-        rotate
+        poolIndex={0}
         story
-        caption={`The answer column cycles through four example pools with explicitly measured efforts; in each, the cheapest model that reaches the request's minimum answers. The setup below uses the first: ${models}.`}
+        caption={`Example pool used in the setup below: ${models}.`}
       />
+      {
+        [1, 2, 3].map((poolIndex) => (
+          <details class="mt-3 text-sm">
+            <summary class="min-h-11 cursor-pointer py-2 underline underline-offset-4">
+              Compare example pool {poolIndex + 1}
+            </summary>
+            <div class="pt-4">
+              <ExampleTable
+                count={3}
+                poolIndex={poolIndex}
+                caption={`Example pool ${poolIndex + 1}. Prices are estimates per request.`}
+              />
+            </div>
+          </details>
+        ))
+      }
     </div>
   </section>
 
@@ -81,16 +97,13 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
           <span class={stepNum} aria-hidden="true">1</span>
           <h3 class={stepTitle}>Install it</h3>
           <p class="text-[var(--color-ink-soft)]">
-            On macOS, with Node.js, jq, git and python3. It sets up the models it knows (Claude and GPT
-            through Claude Code and Codex, Meta Muse through Muse Code or its API, DeepSeek, Qwen, GLM, Kimi, Grok,
-            MiniMax). Keys go in
-            <code class="font-mono text-[0.9em]">~/.config/delegation-kit/.env</code>, a file only you can
-            read. <a href="/docs/configuration/#adding-a-model" class={link}>Any other model</a> with an
-            API compatible with OpenAI's can be added, a local one too.
+            Requires macOS, Node.js, jq, git and Python 3. The standard install adds model profiles
+            and updates the global Claude Code and Codex instructions. See
+            <a href="/docs/#1-install" class={link}>what installation changes</a> before you run it.
           </p>
         </div>
         <CodeBlock
-          label="Terminal"
+          label="Install and inspect profiles"
           typing
           code={`npx delegation-kit
 delegation-config show  # your models`}
@@ -121,7 +134,7 @@ delegation-config show  # your models`}
           </p>
         </div>
         <div class="grid gap-4 min-w-0">
-          <CodeBlock label="Terminal" code="delegation-router serve" />
+          <CodeBlock label="Start the router" code="delegation-router serve" />
           <CodeBlock lang="python" label="Your app (Python, OpenAI SDK)" code={app} />
         </div>
       </li>
@@ -245,11 +258,4 @@ delegation-config show  # your models`}
     transform: scale(0.98);
   }
 
-  /* The hero line: ink fading to grey, left to right, on the text only. */
-  .hero-title {
-    background: linear-gradient(to right, #000000, #666666);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
 </style>

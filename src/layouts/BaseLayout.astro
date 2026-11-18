@@ -57,8 +57,9 @@ const navLink =
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="matteoscurati" />
-    <meta name="theme-color" content="#eef0f3" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#eef0f3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15191f" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -126,7 +127,8 @@ const navLink =
     >
     <header class="sticky top-0 z-40 px-4 pt-3">
       <nav
-        class="max-w-6xl mx-auto h-12 px-4 flex items-center justify-between gap-6 border border-[var(--color-line)] bg-[var(--color-paper)]/80 backdrop-blur-md"
+        aria-label="Main"
+        class="max-w-6xl mx-auto h-12 px-4 flex items-center justify-between gap-6 border border-[var(--color-line)] bg-[var(--color-paper)]"
       >
         <a
           href="/"
