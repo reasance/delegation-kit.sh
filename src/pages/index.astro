@@ -4,9 +4,10 @@ import CodeBlock from '../components/CodeBlock.astro';
 import ExampleTable from '../components/ExampleTable.astro';
 import LadderChart from '../components/LadderChart.astro';
 import kit from '../data/kit.json';
-import { hydrogen, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
+import { hydrogen, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts, examples, rating, priceTag } from '../lib/example-pool';
 
 const models = `${hydrogen.name} (${hydrogen.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
+const heroExamples = [examples[0], examples[2]];
 
 const config = `"router": {
   "decider": { "kind": "llm", "profile": "${flash.id}" },
@@ -34,56 +35,70 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
 <BaseLayout path="/">
   <!-- Hero -->
   <section class="pt-10 pb-16 md:pt-16 md:pb-20">
-    <p class="eyebrow mb-6" data-reveal>A model router on your own machine</p>
-    <h1
-      class="max-w-2xl text-4xl sm:text-5xl md:text-6xl tracking-tight"
-      data-reveal
-      style="--d: 0.08s"
-    >
-      Easy requests go to your cheap models. Hard ones go to your strong ones.
-    </h1>
-    <p
-      class="mt-8 max-w-2xl text-lg md:text-xl text-[var(--color-ink-soft)]"
-      data-reveal
-      style="--d: 0.16s"
-    >
-      Your app sends its requests to delegation-kit instead of to one provider. A decider you pick rates
-      how hard each request is, and the cheapest of your models that can handle it answers. Every answer
-      says which model wrote it, and why.
-    </p>
-    <div class="mt-8" data-reveal style="--d: 0.24s">
-      <p class="flex flex-wrap items-center gap-x-6 gap-y-3">
-        <a href="/docs/" class={btn}>Get started →</a>
-        <a href="#use" class={link}>How you use it ↓</a>
-      </p>
-      <p class="mt-3 text-sm text-[var(--color-ink-soft)]">
-        Free and open source under MIT. Runs on your Mac, with your own keys.
-      </p>
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-start lg:gap-14">
+      <div>
+        <h1 class="max-w-2xl text-4xl sm:text-5xl xl:text-6xl tracking-tight" data-reveal>
+          Easy requests go to your cheap models. Hard ones go to your strong ones.
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-[var(--color-ink-soft)]" data-reveal>
+          Point your app at one local endpoint. A model you choose rates each request, and the
+          cheapest model that meets the minimum answers. Your app can see which model replied and why.
+        </p>
+        <p class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3" data-reveal>
+          <a href="/docs/" class={btn}>Get started →</a>
+          <a href="#routing-example" class={link}>See the routing example</a>
+        </p>
+        <p class="mt-3 text-sm text-[var(--color-ink-soft)]">
+          Free and open source under MIT. Runs on your Mac, with your own keys.
+        </p>
+      </div>
+      <figure id="routing-example" class="min-w-0 scroll-mt-20 border border-[var(--color-line)] bg-[var(--color-panel)] p-4 sm:p-6">
+        <h2 class="text-2xl mb-3">Two requests. Two routes.</h2>
+        <ol class="divide-y divide-[var(--color-line)]">
+          {heroExamples.map((example) => (
+            <li class="py-3">
+              <p class="font-semibold">{example.request}</p>
+              <div class="sample-decision mt-2">
+                <p class="text-sm text-[var(--color-explicit-text)]">Rating {rating(example.v)}</p>
+                <p class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <strong class="text-[var(--color-qualified-text)]">{example.r.chosen.name}</strong>
+                  <span class="font-mono text-sm text-[var(--color-ink-soft)]">~{priceTag(example.r.chosen)} / request</span>
+                </p>
+                <p class="mt-1 text-sm text-[var(--color-ink-soft)]">{example.why}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <figcaption class="mt-2 text-sm text-[var(--color-ink-soft)]">Illustrative requests. Costs are API price estimates.</figcaption>
+      </figure>
     </div>
-    <div class="mt-12">
-      <ExampleTable
-        count={3}
-        poolIndex={0}
-        story
-        caption={`Example pool used in the setup below: ${models}.`}
-      />
-      {
-        [1, 2, 3].map((poolIndex) => (
-          <details class="mt-3 text-sm">
-            <summary class="min-h-11 cursor-pointer py-2 underline underline-offset-4">
-              Compare example pool {poolIndex + 1}
-            </summary>
-            <div class="pt-4">
-              <ExampleTable
-                count={3}
-                poolIndex={poolIndex}
-                caption={`Example pool ${poolIndex + 1}. Prices are estimates per request.`}
-              />
-            </div>
-          </details>
-        ))
-      }
-    </div>
+    <details class="mt-8 border-t border-[var(--color-line)]">
+      <summary class="cursor-pointer py-3 underline underline-offset-4">Compare the example pools</summary>
+      <div class="mt-4">
+        <ExampleTable
+          count={3}
+          poolIndex={0}
+          story
+          caption={`Example pool used in the setup below: ${models}.`}
+        />
+        {
+          [1, 2, 3].map((poolIndex) => (
+            <details class="mt-3 text-sm">
+              <summary class="min-h-11 cursor-pointer py-2 underline underline-offset-4">
+                Compare example pool {poolIndex + 1}
+              </summary>
+              <div class="pt-4">
+                <ExampleTable
+                  count={3}
+                  poolIndex={poolIndex}
+                  caption={`Example pool ${poolIndex + 1}. Prices are estimates per request.`}
+                />
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </details>
   </section>
 
   <!-- How you use it -->
@@ -143,53 +158,6 @@ delegation-config show  # your models`}
     <p class="mt-10" data-reveal>
       <a href="/docs/" class={btn}>Get started, step by step →</a>
     </p>
-  </section>
-
-  <section
-    id="model-preview"
-    aria-labelledby="model-preview-title"
-    class="max-w-6xl mx-auto px-6 py-12"
-  >
-    <p class="eyebrow mb-4">Released v0.38.0 · AA v5.0.1 · November 16, 2026</p>
-    <h2 id="model-preview-title" class="text-3xl md:text-4xl mb-6">
-      Qwen4 Max, with explicit roles.
-    </h2>
-    <p class="max-w-2xl mb-5">Qwen4/high is an optional builder, clerk and scout profile on Token Plan. Your existing profiles, router pool, default and decider stay yours. AA reports 42.9 for an unnamed default setting, with no high/xhigh score. <a href="/docs/models/" class="underline">Model evidence →</a></p>
-    <p class="max-w-2xl mb-5">
-      Fable 5.2/high scores 61.8 and max 64.6. Carbon/high scores 60.0; Hydrogen/high 50.8 and xhigh
-      53.9. Each score belongs to that effort. Frontier starts at 56.6 and mid at 44.6.
-    </p>
-    <p class="max-w-2xl mb-5">
-      Hydrogen/medium is a scout, high a builder or reviewer, and xhigh a deeper builder option.
-      Carbon/high is an optional judge; Fable 5.2 judgement profiles remain available. Your personal
-      router pool, default and decider stay under your control.
-    </p>
-    <p class="max-w-2xl mb-5">
-      Carbon stays optional through Antigravity/agy, requires an enabled Ultra or Enterprise
-      account, and must appear under its exact requested ID. It was absent from the checked local
-      inventory; Hydrogen was present. No model or API substitution.
-    </p>
-    <p>
-      <a href="/docs/models/" class="underline">Benchmarks and provider limits →</a>
-      · <a href="/docs/configuration/" class="underline">Role configuration →</a>
-    </p>
-    <article
-      id="gemini-4-neon"
-      aria-labelledby="neon-title"
-      class="mt-8 max-w-2xl scroll-mt-20 border-t border-[var(--color-line)] pt-6"
-    >
-      <p class="eyebrow mb-3">Development preview · current npm release v{kit.version}</p>
-      <h3 id="neon-title" class="text-2xl mb-3">Gemini 4 Neon</h3>
-      <p class="mb-3">
-        The <code>main</code> branch adds the explicit Antigravity profiles <code>neon-builder</code>
-        at high and <code>neon-judge</code> at xhigh. Choose a profile for your task and confirm that
-        its exact effort ID appears in <code>agy models</code>.
-      </p>
-      <p>
-        Artificial Analysis v5.0.1 measured 59.6 at high and 61.4 at xhigh.
-        <a href="https://github.com/reasance/delegation-kit/blob/main/docs/user-configuration.md#google-cli-profiles" class="underline">Neon profile configuration on GitHub →</a>
-      </p>
-    </article>
   </section>
 
   <!-- How it picks a model -->
@@ -253,6 +221,53 @@ delegation-config show  # your models`}
     </p>
   </section>
 
+  <section
+    id="model-preview"
+    aria-labelledby="model-preview-title"
+    class="max-w-6xl mx-auto px-6 py-12"
+  >
+    <p class="eyebrow mb-4">Released v0.38.0 · AA v5.0.1 · November 16, 2026</p>
+    <h2 id="model-preview-title" class="text-3xl md:text-4xl mb-6">
+      Qwen4 Max, with explicit roles.
+    </h2>
+    <p class="max-w-2xl mb-5">Qwen4/high is an optional builder, clerk and scout profile on Token Plan. Your existing profiles, router pool, default and decider stay yours. AA reports 42.9 for an unnamed default setting, with no high/xhigh score. <a href="/docs/models/" class="underline">Model evidence →</a></p>
+    <p class="max-w-2xl mb-5">
+      Fable 5.2/high scores 61.8 and max 64.6. Carbon/high scores 60.0; Hydrogen/high 50.8 and xhigh
+      53.9. Each score belongs to that effort. Frontier starts at 56.6 and mid at 44.6.
+    </p>
+    <p class="max-w-2xl mb-5">
+      Hydrogen/medium is a scout, high a builder or reviewer, and xhigh a deeper builder option.
+      Carbon/high is an optional judge; Fable 5.2 judgement profiles remain available. Your personal
+      router pool, default and decider stay under your control.
+    </p>
+    <p class="max-w-2xl mb-5">
+      Carbon stays optional through Antigravity/agy, requires an enabled Ultra or Enterprise
+      account, and must appear under its exact requested ID. It was absent from the checked local
+      inventory; Hydrogen was present. No model or API substitution.
+    </p>
+    <p>
+      <a href="/docs/models/" class="underline">Benchmarks and provider limits →</a>
+      · <a href="/docs/configuration/" class="underline">Role configuration →</a>
+    </p>
+    <article
+      id="gemini-4-neon"
+      aria-labelledby="neon-title"
+      class="mt-8 max-w-2xl scroll-mt-20 border-t border-[var(--color-line)] pt-6"
+    >
+      <p class="eyebrow mb-3">Development preview · current npm release v{kit.version}</p>
+      <h3 id="neon-title" class="text-2xl mb-3">Gemini 4 Neon</h3>
+      <p class="mb-3">
+        The <code>main</code> branch adds the explicit Antigravity profiles <code>neon-builder</code>
+        at high and <code>neon-judge</code> at xhigh. Choose a profile for your task and confirm that
+        its exact effort ID appears in <code>agy models</code>.
+      </p>
+      <p>
+        Artificial Analysis v5.0.1 measured 59.6 at high and 61.4 at xhigh.
+        <a href="https://github.com/reasance/delegation-kit/blob/main/docs/user-configuration.md#google-cli-profiles" class="underline">Neon profile configuration on GitHub →</a>
+      </p>
+    </article>
+  </section>
+
 </BaseLayout>
 
 <script>
@@ -260,6 +275,10 @@ delegation-config show  # your models`}
 </script>
 
 <style>
+  .sample-decision {
+    border-inline-start: 1px solid var(--color-explicit-strong);
+    padding-inline-start: 0.75rem;
+  }
   /* An ink button: paper text on ink. It lifts to the next dark step on
    * hover and gives a little on press. */
   .btn {
