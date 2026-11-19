@@ -35,9 +35,9 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
 <BaseLayout path="/">
   <!-- Hero -->
   <section class="pt-10 pb-16 md:pt-16 md:pb-20">
-    <div class="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-start lg:gap-14">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,0.93fr)_minmax(0,1.07fr)] lg:items-center lg:gap-12">
       <div>
-        <h1 class="max-w-2xl text-4xl sm:text-5xl xl:text-6xl tracking-tight" data-reveal>
+        <h1 class="max-w-2xl text-4xl sm:text-5xl xl:text-[3.5rem] tracking-tight [text-wrap:balance]" data-reveal>
           Easy requests go to your cheap models. Hard ones go to your strong ones.
         </h1>
         <p class="mt-5 max-w-xl text-lg text-[var(--color-ink-soft)]" data-reveal>
@@ -52,24 +52,34 @@ const useRow = 'border-t border-[var(--color-line)] pt-6 grid gap-6 lg:grid-cols
           Free and open source under MIT. Runs on your Mac, with your own keys.
         </p>
       </div>
-      <figure id="routing-example" class="min-w-0 scroll-mt-20 border border-[var(--color-line)] bg-[var(--color-panel)] p-4 sm:p-6">
-        <h2 class="text-2xl mb-3">Two requests. Two routes.</h2>
-        <ol class="divide-y divide-[var(--color-line)]">
+      <figure id="routing-example" class="routing-example scroll-mt-20">
+        <header class="routing-heading">
+          <h2>Two requests. Two routes.</h2>
+          <code>model: auto</code>
+        </header>
+        <ol role="list" class="routing-samples">
           {heroExamples.map((example) => (
-            <li class="py-3">
-              <p class="font-semibold">{example.request}</p>
-              <div class="sample-decision mt-2">
-                <p class="text-sm text-[var(--color-explicit-text)]">Rating {rating(example.v)}</p>
-                <p class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <strong class="text-[var(--color-qualified-text)]">{example.r.chosen.name}</strong>
-                  <span class="font-mono text-sm text-[var(--color-ink-soft)]">~{priceTag(example.r.chosen)} / request</span>
-                </p>
-                <p class="mt-1 text-sm text-[var(--color-ink-soft)]">{example.why}</p>
+            <li class="routing-sample">
+              <p class="routing-request">{example.request}</p>
+              <div class="route-reading">
+                <div class="route-rating">
+                  <div class="rating-marks" aria-hidden="true">
+                    {[1, 2, 3, 4].map((level) => (
+                      <span class:list={[level <= example.v.difficulty && 'rating-filled']}></span>
+                    ))}
+                  </div>
+                  <p>Rating {rating(example.v)}</p>
+                </div>
+                <div class="route-choice">
+                  <strong>{example.r.chosen.name}</strong>
+                  <p><span>~{priceTag(example.r.chosen)}</span> / request</p>
+                </div>
               </div>
+              <p class="route-reason">{example.why}</p>
             </li>
           ))}
         </ol>
-        <figcaption class="mt-2 text-sm text-[var(--color-ink-soft)]">Illustrative requests. Costs are API price estimates.</figcaption>
+        <figcaption>Illustrative requests. Costs are API price estimates.</figcaption>
       </figure>
     </div>
     <details class="mt-8 border-t border-[var(--color-line)]">
@@ -275,9 +285,51 @@ delegation-config show  # your models`}
 </script>
 
 <style>
-  .sample-decision {
-    border-inline-start: 1px solid var(--color-explicit-strong);
-    padding-inline-start: 0.75rem;
+  .routing-example {
+    --route-surface: #212630;
+    --route-ink: #f2f4f8;
+    --route-soft: #c3ccdc;
+    --route-rule: #586478;
+    --route-amber: #f2ba61;
+    --route-mint: #8be0b2;
+    background: var(--route-surface);
+    color: var(--route-ink);
+    min-width: 0;
+    border-radius: 0.875rem;
+  }
+  .routing-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.4rem 1rem;
+    padding: 1.15rem clamp(1rem, 3vw, 1.65rem);
+    border-bottom: 1px solid var(--route-rule);
+  }
+  .routing-heading h2 { font-size: clamp(1.25rem, 2.3vw, 1.55rem); line-height: 1.15; }
+  .routing-heading code { color: var(--route-amber); font: 0.8rem/1.4 var(--font-mono); }
+  .routing-samples { margin-inline: clamp(1rem, 3vw, 1.65rem); }
+  .routing-sample + .routing-sample { border-top: 1px solid var(--route-rule); }
+  .routing-sample { padding-block: 1rem; }
+  .routing-request { font-weight: 600; line-height: 1.35; margin-bottom: 0.7rem; }
+  .route-reading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.16fr);
+    align-items: center;
+  }
+  .route-rating { padding-inline-end: 0.75rem; }
+  .route-rating p, .route-choice p, .route-reason, .routing-example figcaption { color: var(--route-soft); font-size: 0.8rem; line-height: 1.45; }
+  .rating-marks { display: flex; gap: 0.2rem; width: min(100%, 6.75rem); margin-bottom: 0.3rem; }
+  .rating-marks span { flex: 1; height: 0.375rem; background: var(--route-rule); }
+  .rating-marks .rating-filled { background: var(--route-amber); }
+  .route-choice { border-inline-start: 1px solid var(--route-rule); padding-inline-start: 0.75rem; }
+  .route-choice strong { display: block; color: var(--route-mint); font-size: 1rem; line-height: 1.25; }
+  .route-choice p { margin-top: 0.2rem; }
+  .route-choice p span { font-family: var(--font-mono); }
+  .route-reason { margin-top: 0.55rem; text-wrap: pretty; }
+  .routing-example figcaption {
+    border-top: 1px solid var(--route-rule);
+    padding: 0.75rem clamp(1rem, 3vw, 1.65rem);
   }
   /* An ink button: paper text on ink. It lifts to the next dark step on
    * hover and gives a little on press. */
