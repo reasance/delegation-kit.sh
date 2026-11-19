@@ -6,6 +6,9 @@ path: '/docs/models'
 ---
 
 <!-- Generated from the released kit by npm run sync-kit. -->
+
+[Gemini 4 Neon development preview](/#gemini-4-neon) describes the profiles available from `main`.
+
 <!-- BEGIN AUTOGEN -->
 
 # Model reference: Artificial Analysis Intelligence Index v5.0.1

@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import ExampleTable from '../components/ExampleTable.astro';
 import LadderChart from '../components/LadderChart.astro';
+import kit from '../data/kit.json';
 import { hydrogen, flash, opus, pool, fallback, catalogVersion, indexVersion, cuts } from '../lib/example-pool';
 
 const models = `${hydrogen.name} (${hydrogen.via}), ${flash.name} (${flash.via}) and ${opus.name} (${opus.via})`;
@@ -172,6 +173,23 @@ delegation-config show  # your models`}
       <a href="/docs/models/" class="underline">Benchmarks and provider limits →</a>
       · <a href="/docs/configuration/" class="underline">Role configuration →</a>
     </p>
+    <article
+      id="gemini-4-neon"
+      aria-labelledby="neon-title"
+      class="mt-8 max-w-2xl scroll-mt-20 border-t border-[var(--color-line)] pt-6"
+    >
+      <p class="eyebrow mb-3">Development preview · current npm release v{kit.version}</p>
+      <h3 id="neon-title" class="text-2xl mb-3">Gemini 4 Neon</h3>
+      <p class="mb-3">
+        The <code>main</code> branch adds the explicit Antigravity profiles <code>neon-builder</code>
+        at high and <code>neon-judge</code> at xhigh. Choose a profile for your task and confirm that
+        its exact effort ID appears in <code>agy models</code>.
+      </p>
+      <p>
+        Artificial Analysis v5.0.1 measured 59.6 at high and 61.4 at xhigh.
+        <a href="https://github.com/reasance/delegation-kit/blob/main/docs/user-configuration.md#google-cli-profiles" class="underline">Neon profile configuration on GitHub →</a>
+      </p>
+    </article>
   </section>
 
   <!-- How it picks a model -->
